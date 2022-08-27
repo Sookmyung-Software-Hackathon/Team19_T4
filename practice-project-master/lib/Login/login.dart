@@ -1,8 +1,8 @@
+import 'package:T4/mainBoard/mainBoardPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../tabbar_mainview.dart';
 import '../Login/findPassword.dart';
 import 'signup.dart';
 import 'package:T4/server.dart';
@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => tabBarMainPage()),
+          MaterialPageRoute(builder: (context) => MainBoardPage()),
         );
       }
     } else if(response.statusCode == 400){

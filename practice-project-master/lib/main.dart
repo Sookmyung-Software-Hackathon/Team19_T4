@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:T4/tabbar_mainview.dart';
 import 'dart:async';
 
-import 'tabbar_mainview.dart';
 import 'Login/login.dart';
+import 'package:T4/mainBoard/mainBoardPage.dart';
 
 void main() {
   runApp(new MaterialApp(
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
-      '/login': (BuildContext context) => new LoginPage()
+      '/login': (BuildContext context) => new MainBoardPage()
     },
   ));
 }
