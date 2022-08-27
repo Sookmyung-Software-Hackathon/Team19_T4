@@ -1,3 +1,4 @@
+import 'package:T4/Mypage/mypageMain.dart';
 import 'package:T4/mainBoard/createBoard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,7 +54,10 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           )),
                           Container(
                               child: IconButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) => MyPage()));
+                            },
                             icon: SvgPicture.asset(
                               'icons/mypage.svg',
                             ),
