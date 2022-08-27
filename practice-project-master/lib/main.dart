@@ -1,5 +1,7 @@
+import 'package:T4/mainBoard/createReview.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'Login/login.dart';
 import 'package:T4/mainBoard/mainBoardPage.dart';
@@ -8,6 +10,14 @@ import 'Mypage/mypageEdit.dart';
 
 void main() {
   runApp(new MaterialApp(
+    localizationsDelegates: [
+      GlobalMaterialLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: [
+      const Locale('ko', 'KR'),
+    ],
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
       '/login': (BuildContext context) => new MainBoardPage()

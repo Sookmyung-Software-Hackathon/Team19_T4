@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 
 import 'package:T4/color.dart';
 
@@ -18,6 +21,9 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
   String _selectRegion='용산구';
   final _foodList=['한식', '양식', '중식', '일식','기타'];
   String _selectFood='한식';
+
+  // DateTime? _selectedDate = DateTime.now();
+  final format = DateFormat("yyyy/MM/dd HH:MM");
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +45,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                         child: Text(
                           '<',
                           style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 30),
+                              fontWeight: FontWeight.w600, fontSize: 30),
                         ),
                       )
                     ],
@@ -47,7 +53,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                     Expanded(
                       child: SingleChildScrollView(
                           child:Container(
-                            padding: EdgeInsets.only(left:30.0, right:30.0, top:5.0),
+                            padding: EdgeInsets.only(left:25.0, right:25.0, top:5.0),
                           child:
                           Column(children: [
                         Container(
@@ -66,16 +72,17 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                 contentPadding: EdgeInsets.only(left: 10.0),
                                 enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
-                                      color: Color(0xffffffff),
+                                      color: Color(0xff666666),
                                   )),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Color(0xffffffff),
+                                    color: Color(0xff666666),
                                   ),
-                                )),
+                                ),),
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18.0, color: Color(0xff333333)),
                           ),
                         ),
-                        Padding(padding: EdgeInsets.only(bottom:5.0)),
+                        Padding(padding: EdgeInsets.only(bottom:10.0)),
                         Container(
                           decoration: BoxDecoration(
                             // borderRadius: BorderRadius.circular(20),
@@ -83,20 +90,20 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                             border: Border(
                                 bottom: BorderSide(
                               color: Color(0xff666666),
-                              width: 2.0,
-                            ),
-                              top: BorderSide(
-                                color: Color(0xff666666),
-                            width: 2.0,
-                          )
-                            ),
-                            // border: Border.all(
-                            //   width: 2,
-                            //   color: Color(0xff999999)
-                            // )
+                              width: 1.0,
+                            ),)
+                          //     top: BorderSide(
+                          //       color: Color(0xff666666),
+                          //   width: 2.0,
+                          // )
+                          //   ),
+                          //   border: Border.all(
+                          //     width: 3,
+                          //     color: Color(greenColor)
+                          //   )
                           ),
                           padding: EdgeInsets.only(
-                              right: 10.0, left: 10.0, bottom: 20.0, top:10.0),
+                              right: 10.0, left: 10.0, bottom: 30.0, top:5.0),
                           child: Column(
                             children: [
                               Row(
@@ -110,12 +117,17 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '지역',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                          color: Color(0xff333333),
+                                          fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
                                   Padding(padding: EdgeInsets.all(5.0)),
                                   Container(
                                     width: MediaQuery.of(context).size.width*25/100,
+                                    height: MediaQuery.of(context).size.height *
+                                        7 /
+                                        100,
                                     child: DropdownButton(
                                       isExpanded: true,
                                       value: _selectRegion,
@@ -133,7 +145,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       items: _regionList.map((value) {
                                         return DropdownMenuItem(
                                           value: value,
-                                          child: Text(value),
+                                          child: Text(value, style: TextStyle(fontSize: 14.0, color: Color(0xff333333))),
                                         );
                                       }).toList(),
                                     ),
@@ -151,6 +163,8 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '음식점 이름',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                          color: Color(0xff333333),
+                                        fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -159,12 +173,14 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       width: MediaQuery.of(context).size.width *
                                           50 /
                                           100,
+                                      height: MediaQuery.of(context).size.height *
+                                          5 /
+                                          100,
                                       child: TextFormField(
                                         validator: (value) =>
                                         value!.isEmpty ? '음식점 이름을 입력해주세요.' : null,
                                         onSaved: (value) => _store = value!,
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(left: 10.0),
                                             enabledBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(greenColor),
@@ -173,11 +189,15 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                               borderSide: BorderSide(
                                                 color: Color(greenColor),
                                               ),
-                                            )),
-                                      ),),
+                                            ),
+                                          hintText: "먹고 싶은 가게 이름",
+                                            hintStyle: TextStyle(fontSize: 14.0)
+                                        ),
+                                          style: TextStyle(fontSize: 14.0, color: Color(0xff333333)),
+                                      ),
+                                  ),
                                 ],
                               ),
-                              Padding(padding: EdgeInsets.only(bottom:5.0)),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
@@ -187,12 +207,17 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '음식 종류',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                          color: Color(0xff333333),
+                                          fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
                                   Padding(padding: EdgeInsets.all(5.0)),
                                   Container(
                                     width: MediaQuery.of(context).size.width*25/100,
+                                    height: MediaQuery.of(context).size.height *
+                                        7 /
+                                        100,
                                       child: DropdownButton(
                                         isExpanded: true,
                                         value: _selectFood,
@@ -210,7 +235,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                         items: _foodList.map((value) {
                                           return DropdownMenuItem(
                                             value: value,
-                                            child: Text(value),
+                                            child: Text(value, style: TextStyle(fontSize: 14.0, color: Color(0xff333333))),
                                           );
                                         }).toList(),
                                       ),),
@@ -227,28 +252,52 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '날짜 및 시간',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                          color: Color(0xff333333),
+                                          fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
                                   Padding(padding: EdgeInsets.all(5.0)),
                                   Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          50 /
-                                          100,
-                                      child: TextFormField(
-                                        controller: _title,
-                                        decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(left: 10.0),
-                                            enabledBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Color(0xffD9D9D9),
-                                                )),
-                                            focusedBorder: UnderlineInputBorder(
+                                    width: MediaQuery.of(context).size.width *
+                                    50 /
+                                    100,
+                                    height: MediaQuery.of(context).size.height *
+                                        6 /
+                                        100,
+                                    child: DateTimeField(
+                                      format: format,
+                                      initialValue: DateTime.now(),
+                                      onShowPicker: (context, currentValue) async {
+                                        final date = await showDatePicker(
+                                            context: context,
+                                            firstDate: DateTime.now(),
+                                            initialDate: currentValue ?? DateTime.now(),
+                                            lastDate: DateTime(2100));
+                                        if (date != null) {
+                                          final time = await showTimePicker(
+                                            context: context,
+                                            initialTime:
+                                            TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+                                          );
+                                          return DateTimeField.combine(date, time);
+                                        } else {
+                                          return currentValue;
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                          enabledBorder: UnderlineInputBorder(
                                               borderSide: BorderSide(
-                                                color: Color(0xffD9D9D9),
-                                              ),
-                                            )),
-                                      ),),
+                                                color: Color(greenColor),
+                                              )),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color: Color(greenColor),
+                                            ),)
+                                      ),
+                                      style: TextStyle(fontSize: 14.0, color: Color(0xff333333)),
+                                    ),
+                                  ),
                                 ],
                               ),
                               Row(
@@ -262,6 +311,8 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '모집 인원',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                        color: Color(0xff333333),
+                                          fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -270,13 +321,15 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       width: MediaQuery.of(context).size.width *
                                           50 /
                                           100,
+                                    height: MediaQuery.of(context).size.height *
+                                        6 /
+                                        100,
                                       child: TextFormField(
                                         keyboardType: TextInputType.number,
                                         validator: (value) =>
                                         value!.isEmpty ? '모집 인원을 입력해주세요.': int.parse(value) > 10? '10명 이하로 입력해주세요.': null,
                                         onSaved: (value) => _people = int.parse(value!),
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(left: 10.0),
                                             enabledBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(greenColor),
@@ -285,7 +338,10 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                               borderSide: BorderSide(
                                                 color: Color(greenColor),
                                               ),
-                                            )),
+                                            ),
+                                        hintText: "본인 포함 10명까지",
+                                        hintStyle: TextStyle(fontSize: 14.0)),
+                                        style: TextStyle(fontSize: 14.0, color: Color(0xff333333)),
                                       ),),
                                 ],
                               ),
@@ -300,6 +356,8 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       '오픈 채팅방 링크',
                                       style: TextStyle(
                                         fontSize: 14.0,
+                                          color: Color(0xff333333),
+                                          fontWeight: FontWeight.w600
                                       ),
                                     ),
                                   ),
@@ -308,12 +366,14 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       width: MediaQuery.of(context).size.width *
                                           50 /
                                           100,
+                                    height: MediaQuery.of(context).size.height *
+                                        6 /
+                                        100,
                                       child: TextFormField(
                                         validator: (value) =>
                                         value!.isEmpty ? null: null,
                                         onSaved: (value) => _kakoLink = value!,
                                         decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.only(left: 10.0),
                                             enabledBorder: UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                   color: Color(greenColor),
@@ -322,26 +382,36 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                               borderSide: BorderSide(
                                                 color: Color(greenColor),
                                               ),
-                                            )),
+                                            ),
+                                        hintText: "선택",
+                                        hintStyle: TextStyle(fontSize: 14.0)),
+                                        style: TextStyle(fontSize: 14.0, color: Color(0xff333333)),
                                       ),),
                                 ],
                               ),
+                              Padding(padding: EdgeInsets.only(bottom:5.0)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                Text("* 링크를 작성하실 경우 매징된 유저에게 링크가 보내집니다.", style: TextStyle(fontSize: 10.0, color: Color(greenColor)),)
+
+                              ],)
                             ],
                           ),
                         ),
-                        Padding(padding: EdgeInsets.all(10.0)),
+                        Padding(padding: EdgeInsets.only(top:5.0)),
                         Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                // color: Color(0xfff0f0f0),
-                                border: Border.all(
-                                    width: 2, color: Color(greenColor))),
+                            // decoration: BoxDecoration(
+                            //     borderRadius: BorderRadius.circular(10),
+                            //     // color: Color(0xfff0f0f0),
+                            //     border: Border.all(
+                            //         width: 2, color: Color(greenColor))),
                             width: MediaQuery.of(context).size.width * 80 / 100,
                             height: 150.0,
                             child: TextFormField(
                               controller: _title,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.only(left: 10.0),
+                                  // contentPadding: EdgeInsets.only(left: 10.0),
                                   enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
                                         color: Color(0xffffffff),
@@ -350,54 +420,22 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                     borderSide: BorderSide(
                                       color: Color(0xffffffff),
                                     ),
-                                  )),
-                            ),)
+                                  ),
+                              hintText: "간단한 설명을 적어주세요!",
+                              hintStyle: TextStyle(fontSize: 14.0,)),
+
+                            ),
+                        )
                       ])
                       ),)
                     ),
                   ])
-
-              // Align(
-              //   alignment: Alignment.bottomCenter,
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width,
-              //     child: ElevatedButton(
-              //       style: ElevatedButton.styleFrom(primary: Color(greenColor)),
-              //       child: Text(
-              //         '작성하기',
-              //         style: TextStyle(
-              //             fontWeight: FontWeight.w600,
-              //             color: Colors.white,
-              //             fontSize: 16.0),
-              //       ),
-              //       onPressed: () {},
-              //     ),
-              //   ),
-              // )
             ),
       ),
-
-      // floatingActionButtonLocation:
-      // FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: Container(
-      //   height: 50,
-      //   child: ElevatedButton(
-      //     style: ElevatedButton.styleFrom(primary: Color(greenColor)),
-      //         child: Text(
-      //           '작성하기',
-      //           style: TextStyle(
-      //               fontWeight: FontWeight.w600,
-      //               color: Colors.white,
-      //               fontSize: 16.0),
-      //         ),
-      //         onPressed: () {},
-      //   ),
-      // ),
-
       bottomSheet: Container(
         width: MediaQuery.of(context).size.width,
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(primary: Color(greenColor), padding: EdgeInsets.only(top:10.0, bottom:10.0)),
+          style: ElevatedButton.styleFrom(primary: Color(greenColor), padding: EdgeInsets.only(top:15.0, bottom:15.0)),
           child: Text(
             '작성하기',
             style: TextStyle(
@@ -405,7 +443,9 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                 color: Colors.white,
                 fontSize: 16.0),
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
     );
