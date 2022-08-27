@@ -1,5 +1,6 @@
 import 'package:T4/Mypage/mypageMain.dart';
 import 'package:T4/mainBoard/createBoard.dart';
+import 'package:T4/mainBoard/readBoard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -78,6 +79,12 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           ...List.generate(
                             10,
                             (idx) => Container(
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (_) => ReadBoardPage()));
+                                },
+                                child: Container(
                                 height: MediaQuery.of(context).size.height *
                                     13 /
                                     100,
@@ -141,7 +148,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                             ])
                                       ],
                                     ))),
-                          ),
+                          ),))
                         ],
                       )),
                 )),
