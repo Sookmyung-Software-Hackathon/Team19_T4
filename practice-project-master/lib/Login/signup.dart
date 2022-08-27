@@ -311,12 +311,12 @@ class _SignUpPageState extends State<SignUpPage> {
                             width: 100.0,
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 10.0),
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Color(greenColor),
-                                    width: 1,
-                                    style: BorderStyle.solid),
-                                borderRadius: BorderRadius.circular(8)),
+                            // decoration: BoxDecoration(
+                            //     border: Border.all(
+                            //         color: Color(greenColor),
+                            //         width: 1,
+                            //         style: BorderStyle.solid),
+                            //     borderRadius: BorderRadius.circular(8)),
                             child: DropdownButton(
                               isExpanded: true,
                               value: _selectBirth,
@@ -325,8 +325,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                   _selectBirth = newValue as String;
                                 });
                               },
-                              underline: DropdownButtonHideUnderline(
-                                  child: Container()),
+                              underline: Container(
+                                height: 2,
+                                color: Color(greenColor),
+                              ),
+                              // underline: DropdownButtonHideUnderline(
+                              //     child: Container()),
                               items: _birthList.map((value) {
                                 return DropdownMenuItem(
                                   value: value,
