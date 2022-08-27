@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:T4/tabbar_mainview.dart';
 import 'dart:async';
 
-import 'Mypage/mypageMain.dart';
-import 'tabbar_mainview.dart';
 import 'Login/login.dart';
+import 'package:T4/mainBoard/mainBoardPage.dart';
+import '/Mypage/mypageMain.dart';
 
 void main() {
   runApp(new MaterialApp(
