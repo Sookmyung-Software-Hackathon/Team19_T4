@@ -5,8 +5,8 @@ import 'login.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:smsw/server.dart';
-import 'package:smsw/color.dart';
+import 'package:T4/server.dart';
+import 'package:T4/color.dart';
 
 class findPasswordPage extends StatefulWidget {
   const findPasswordPage({Key? key}) : super(key: key);

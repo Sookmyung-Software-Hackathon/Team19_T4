@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smsw/color.dart';
+import 'package:T4/color.dart';
 
 import 'First/firstMainPage.dart';
 import 'Second/secondMainPage.dart';

@@ -5,8 +5,8 @@ import 'dart:convert';
 import '../tabbar_mainview.dart';
 import '../Login/findPassword.dart';
 import 'signup.dart';
-import 'package:smsw/server.dart';
-import 'package:smsw/color.dart';
+import 'package:T4/server.dart';
+import 'package:T4/color.dart';
 
 var authToken = '';
 var refreshToken = '';

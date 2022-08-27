@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:smsw/server.dart';
-import 'package:smsw/color.dart';
+import 'package:T4/server.dart';
+import 'package:T4/color.dart';
 import 'login.dart';
 
 class SignUpPage extends StatefulWidget {
