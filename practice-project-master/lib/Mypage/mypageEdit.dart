@@ -1,3 +1,4 @@
+import 'package:T4/Mypage/mypageMain.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
@@ -45,6 +46,35 @@ class _MyPageEditState extends State<MyPageEdit> {
               ),
               onPressed: () {
                 print("저장");
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyPage()),
+                );
+                // TODO dialog show
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text(
+                      '내 정보 변경',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    content: const Text('정보 변경에 성공하였습니다.'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          // Navigator.push(context,
+                          //   MaterialPageRoute(builder: (context) => LoginPage()),
+                          // );
+                        },
+                        child: const Text('확인'),
+                      ),
+                    ],
+                  ),
+                );
               },
               child: Text('수정 완료'),
             ),
@@ -69,14 +99,28 @@ class _MyPageEditState extends State<MyPageEdit> {
                         )
                     ),
                     child: Container(
-                      padding: EdgeInsets.all(30),
+                      padding: EdgeInsets.only(left: 30, right: 30, top: 20),
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 150,
+                      height: MediaQuery.of(context).size.height - 120,
                       child: Center(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
+
+                            Container(
+                              margin: EdgeInsets.only(bottom: 15),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(onPressed: (){
+                                    Navigator.pop(context);
+                                  },
+                                      icon: Icon(Icons.arrow_back_ios_new_rounded)),
+                                  Spacer(),
+                                ],
+                              )
+                            ),
 
                             GestureDetector(
                               onTap: () {
@@ -117,7 +161,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                               children: [
                                 Container(
                                   padding: EdgeInsets.all(20),
-                                  margin: EdgeInsets.only(top: 50.0),
+                                  margin: EdgeInsets.only(top: 30.0),
                                   decoration: BoxDecoration(
                                       color: Color(0xffFFFFFF),
                                       borderRadius: BorderRadius.all(Radius.circular(15))

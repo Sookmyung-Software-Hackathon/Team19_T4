@@ -1,9 +1,13 @@
+import 'package:T4/Mypage/mypageEdit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:percent_indicator/percent_indicator.dart';
+
+import 'myReviewPage.dart';
 
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
@@ -13,8 +17,10 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -38,11 +44,32 @@ class _MyPageState extends State<MyPage> {
                   child: Center(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        Container(
+                            margin: EdgeInsets.only(bottom: 15),
+                            padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                    icon: Icon(Icons.arrow_back_ios_new_rounded)),
+                                Spacer(),
+                                IconButton(onPressed: (){
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyPageEdit()),
+                                  );
+                                }, icon: Icon(Icons.edit))
+                              ],
+                            )
+                        ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                            "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                            "https://user-images.githubusercontent.com/61380136/187037733-a81beb82-721e-4ed2-a05d-7a7fbda7d98d.png",
                           ),
                           radius: 100.0,
                         ),
@@ -214,6 +241,13 @@ class _MyPageState extends State<MyPage> {
                           onTap: (){
                             // TODO 후기보기 동작 넣기
                             print("후기 보기");
+                            //Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyReviewPage()),
+                            );
+
                           },
                           child: Text("후기 보기 >",
                             style: TextStyle(
