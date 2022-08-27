@@ -4,6 +4,7 @@ import 'dart:async';
 import 'Login/login.dart';
 import 'package:T4/mainBoard/mainBoardPage.dart';
 import '/Mypage/mypageMain.dart';
+import 'Mypage/mypageEdit.dart';
 
 void main() {
   runApp(new MaterialApp(
@@ -41,10 +42,8 @@ class _SplashScreenState extends State<SplashScreen> {
         body: new Container(
             child: Center(
               child: Container(
-                width: 100,
-                height: 100,
                 // alignment:Alignment.center,
-                child: Image.asset('images/happy.png'),
+                child: Image.asset('images/Splash.png'),
               ),
             )
         )
