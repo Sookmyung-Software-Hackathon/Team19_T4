@@ -7,6 +7,8 @@ import 'dart:convert';
 
 import 'package:percent_indicator/percent_indicator.dart';
 
+import 'myReviewPage.dart';
+
 class MyPage extends StatefulWidget {
   const MyPage({Key? key}) : super(key: key);
 
@@ -67,7 +69,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                            "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                            "https://user-images.githubusercontent.com/61380136/187037733-a81beb82-721e-4ed2-a05d-7a7fbda7d98d.png",
                           ),
                           radius: 100.0,
                         ),
@@ -240,6 +242,11 @@ class _MyPageState extends State<MyPage> {
                             // TODO 후기보기 동작 넣기
                             print("후기 보기");
                             //Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyReviewPage()),
+                            );
 
                           },
                           child: Text("후기 보기 >",
