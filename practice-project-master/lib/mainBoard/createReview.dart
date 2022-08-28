@@ -68,7 +68,7 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                         Container(
                           child:
                         Text(
-                          "시간 약속을 잘 지켜요",
+                          "만족하셨나요?",
                           style: TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,

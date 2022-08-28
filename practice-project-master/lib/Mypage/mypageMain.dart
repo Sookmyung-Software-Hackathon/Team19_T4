@@ -53,7 +53,6 @@ class MyPage extends StatefulWidget {
 
   const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score, required this.place, required this.time}) : super(key: key);
 
-
   @override
   State<MyPage> createState() => _MyPageState();
 }

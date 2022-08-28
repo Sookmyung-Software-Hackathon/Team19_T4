@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
         print("authToken: ${authToken}");
 
 
-        await _boardList("강남구");
+        await _boardList("용산구");
 
         print(res);
         // Navigator.pop(context);
