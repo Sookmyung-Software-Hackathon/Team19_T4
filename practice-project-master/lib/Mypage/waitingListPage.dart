@@ -10,7 +10,10 @@ import '../color.dart';
 import '../mainBoard/readBoard.dart';
 
 class WaitingListPage extends StatefulWidget {
-  const WaitingListPage({Key? key}) : super(key: key);
+
+  final List<UserWritingList> waitingList;
+
+  const WaitingListPage({Key? key, required this.waitingList}) : super(key: key);
 
   @override
   State<WaitingListPage> createState() => _WaitingListPageState();
@@ -49,7 +52,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                         child: Column(
                           children: [
                             ...List.generate(
-                                10,
+                                widget.waitingList.length,
                                     (idx) => Container(
                                   child: InkWell(
                                     onTap: () {
@@ -103,7 +106,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                              '마라탕 먹으러 가실 분 구합니다.',
+                                                              '${widget.waitingList[idx].postTitle}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   16.0,
@@ -127,7 +130,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                                                                 greenColor),
                                                             size: 20.0,
                                                           ),
-                                                          Text('탕화쿵푸 숙대점',
+                                                          Text('${widget.waitingList[idx].restaurant}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   14.0,
@@ -158,7 +161,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                            '2022.08.28 13:00',
+                                                            '${widget.waitingList[idx].time.substring(0,4)}.${widget.waitingList[idx].time.substring(5,7)}.${widget.waitingList[idx].time.substring(8,10)} ${widget.waitingList[idx].time.substring(11,13)}:${widget.waitingList[idx].time.substring(14,16)}',
                                                             style: TextStyle(
                                                                 fontSize:
                                                                 14.0,
@@ -184,7 +187,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                                                             'images/promise.png'),
                                                       ),
                                                       Text(
-                                                        "1/2",
+                                                        "${widget.waitingList[idx].checkNum}/${widget.waitingList[idx].num}",
                                                         style: TextStyle(
                                                             fontSize: 20.0,
                                                             color: Color(
