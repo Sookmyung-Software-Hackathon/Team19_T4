@@ -42,6 +42,9 @@ class _MyPageEditState extends State<MyPageEdit> {
   int age = 0;
   String sex = "";
 
+  String place = "";
+  String time = "";
+
   int score = 0;
 
   void getImage({required ImageSource source}) async {
@@ -122,6 +125,7 @@ class _MyPageEditState extends State<MyPageEdit> {
   }
 
   void userInfo() async {
+    RecentPromiseInfo();
     var url = Uri.http('${serverHttp}:8080', '/member/info');
 
     var response = await http.get(url, headers: {
@@ -203,8 +207,69 @@ class _MyPageEditState extends State<MyPageEdit> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+            builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score, place: place, time: time)),
       );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userInfo();
+        check = false;
+      }
+    }
+    else {
+
+      print('error : ${response.reasonPhrase}');
+    }
+  }
+
+  void RecentPromiseInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/plan/scheduled');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+
+      data = data["list"];
+
+      if(data.length != 0){
+        for(dynamic i in data){
+          place = i["restaurant"];
+          time = i["appointmentTime"];
+          time = time.substring(11, 16);
+          break;
+        }
+      }
+      else{
+        place = "";
+        time = "";
+      }
+
+      print("장소는 ${place}");
+
+
+//      print("시간은: ${time.substring(11,16)}");
+
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+      // );
 
       // name = data["name"].toString();
     } else if(response.statusCode == 401){
