@@ -10,7 +10,10 @@ import '../color.dart';
 import '../mainBoard/readBoard.dart';
 
 class ParticipationListPage extends StatefulWidget {
-  const ParticipationListPage({Key? key}) : super(key: key);
+
+  final List<UserWritingList> participationList;
+
+  const ParticipationListPage({Key? key, required this.participationList}) : super(key: key);
 
   @override
   State<ParticipationListPage> createState() => _ParticipationListPageState();
@@ -50,7 +53,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                         child: Column(
                           children: [
                             ...List.generate(
-                                10,
+                                widget.participationList.length,
                                     (idx) => Container(
                                   child: InkWell(
                                     onTap: () {
@@ -96,7 +99,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                              '마라탕 먹으러 가실 분 구합니다.',
+                                                              '${widget.participationList[idx].postTitle}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   16.0,
@@ -119,7 +122,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                                                             color: Color(greenColor),
                                                             size: 20.0,
                                                           ),
-                                                          Text('탕화쿵푸 숙대점',
+                                                          Text('${widget.participationList[idx].restaurant}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   14.0,
@@ -150,7 +153,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                            '2022.08.28 13:00',
+                                                            '${widget.participationList[idx].time.substring(0,4)}.${widget.participationList[idx].time.substring(5,7)}.${widget.participationList[idx].time.substring(8,10)} ${widget.participationList[idx].time.substring(11,13)}:${widget.participationList[idx].time.substring(14,16)}',
                                                             style: TextStyle(
                                                                 fontSize:
                                                                 14.0,
@@ -176,7 +179,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                                                             'images/promise.png'),
                                                       ),
                                                       Text(
-                                                        "1/2",
+                                                        "${widget.participationList[idx].checkNum}/${widget.participationList[idx].num}",
                                                         style: TextStyle(
                                                             fontSize: 20.0,
                                                             color: Color(

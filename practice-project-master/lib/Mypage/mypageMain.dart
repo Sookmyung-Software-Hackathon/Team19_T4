@@ -30,6 +30,17 @@ class ReviewList2 {
   ReviewList2(this.Score, this.reviewStr);
 }
 
+class UserWritingList {
+  final int postId;
+  final String postTitle;
+  final String time;
+  final String restaurant;
+  final int num;
+  final int checkNum;
+
+  UserWritingList(this.postId, this.postTitle, this.time, this.restaurant, this.num, this.checkNum);
+}
+
 class MyPage extends StatefulWidget {
 
   final String imgURL;
@@ -61,6 +72,10 @@ class _MyPageState extends State<MyPage> {
 
   final reviewlist1 = new List<ReviewList1>.empty(growable: true);
   final reviewlist2 = new List<ReviewList2>.empty(growable: true);
+
+  final writingList = new List<UserWritingList>.empty(growable: true);
+  final waitingList = new List<UserWritingList>.empty(growable: true);
+  final participateList = new List<UserWritingList>.empty(growable: true);
 
   void writtenListInfo() async {
 
@@ -102,6 +117,196 @@ class _MyPageState extends State<MyPage> {
       await RefreshToken(context);
       if(check == true){
         writtenListInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
+  void userWaitingList() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/member/plan/scheduled');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      data = data["list"];
+
+      waitingList.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["postId"];
+          String b = i["postTitle"];
+          String c = i["appointmentTime"];
+          String d = i["restaurant"];
+          int e = i["numOfParticipants"];
+          int f = i["numOfPermittedMember"];
+          waitingList.add(UserWritingList(a, b, c, d, e, f));
+        }
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WaitingListPage(waitingList: waitingList,)),
+      );
+
+
+      //print(data);
+      //
+      // reviewlist2.clear();
+      // if(data.length != 0){
+      //   for(dynamic i in data){
+      //     int a = i["score"];
+      //     String b = i["comment"];
+      //     reviewlist2.add(ReviewList2(a, b));
+      //   }
+      // }
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (_) => MyReviewPage(score: widget.score, reviewList1: reviewlist1, reviewList2: reviewlist2))
+      // );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userWritingList();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
+  void userWritingList() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/member/posts');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      data = data["list"];
+
+      writingList.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["postId"];
+          String b = i["postTitle"];
+          String c = i["appointmentTime"];
+          String d = i["restaurant"];
+          int e = i["numOfParticipants"];
+          int f = i["numOfPermittedMember"];
+          writingList.add(UserWritingList(a, b, c, d, e, f));
+        }
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WritingListPage(writingList: writingList)),
+      );
+
+
+      //print(data);
+      //
+      // reviewlist2.clear();
+      // if(data.length != 0){
+      //   for(dynamic i in data){
+      //     int a = i["score"];
+      //     String b = i["comment"];
+      //     reviewlist2.add(ReviewList2(a, b));
+      //   }
+      // }
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (_) => MyReviewPage(score: widget.score, reviewList1: reviewlist1, reviewList2: reviewlist2))
+      // );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userWritingList();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
+  void userParticipateList() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/plan/permitted/list');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      data = data["list"];
+
+      participateList.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["postId"];
+          String b = i["postTitle"];
+          String c = i["appointmentTime"];
+          String d = i["restaurant"];
+          int e = i["numOfParticipants"];
+          int f = i["numOfPermittedMember"];
+          participateList.add(UserWritingList(a, b, c, d, e, f));
+        }
+      }
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ParticipationListPage(participationList: participateList,)),
+      );
+
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userParticipateList();
         check = false;
       }
     }
@@ -491,11 +696,7 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WaitingListPage()),
-                );
+                userWaitingList();
               },
               child: Container(
                 height: 50,
@@ -537,11 +738,7 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ParticipationListPage()),
-                );
+                userParticipateList();
               },
               child: Container(
                 height: 50,
@@ -581,11 +778,7 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WritingListPage()),
-                );
+                userWritingList();
               },
               child: Container(
                 height: 50,
