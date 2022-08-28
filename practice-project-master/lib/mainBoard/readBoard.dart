@@ -1,3 +1,4 @@
+import 'package:T4/mainBoard/userProfilePage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:T4/color.dart';
@@ -59,14 +60,20 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
-                                  //프로필 이미지
-                                  width: 50.0,
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                      "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                                GestureDetector(
+                                  onTap: (){
+                                    //TODO
+                                    Navigator.push(context, MaterialPageRoute(builder: (_) => userProfilePage()));
+                                  },
+                                  child: Container(
+                                    //프로필 이미지
+                                    width: 50.0,
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                                      ),
+                                      radius: 100.0,
                                     ),
-                                    radius: 100.0,
                                   ),
                                 ),
                                 Padding(padding: EdgeInsets.all(5.0)),
