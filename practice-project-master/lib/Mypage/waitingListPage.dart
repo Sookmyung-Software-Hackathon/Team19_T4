@@ -17,6 +17,8 @@ class WaitingListPage extends StatefulWidget {
 }
 
 class _WaitingListPageState extends State<WaitingListPage> {
+  var _data;
+  var _userData;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +57,7 @@ class _WaitingListPageState extends State<WaitingListPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (_) =>
-                                                  ReadBoardPage()));
+                                                  ReadBoardPage(data: _data, userData: _userData,)));
                                     },
                                     child: Container(
                                         height: MediaQuery.of(context)

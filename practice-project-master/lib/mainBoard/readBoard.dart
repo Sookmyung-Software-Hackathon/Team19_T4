@@ -1,16 +1,25 @@
+import 'dart:convert';
+import 'package:T4/Login/login.dart';
+import 'package:http/http.dart' as http;
 import 'package:T4/mainBoard/userProfilePage.dart';
+import 'package:T4/server.dart';
 import 'package:flutter/material.dart';
 
 import 'package:T4/color.dart';
 
 class ReadBoardPage extends StatefulWidget {
-  const ReadBoardPage({Key? key}) : super(key: key);
+  final Map data;
+  final Map userData;
+  const ReadBoardPage({Key? key, required this.data, required this.userData}) : super(key: key);
 
   @override
   State<ReadBoardPage> createState() => _ReadBoardPageState();
 }
 
 class _ReadBoardPageState extends State<ReadBoardPage> {
+  late var dataMap=widget.data;
+  late var userDataMap=widget.userData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +79,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     width: 50.0,
                                     child: CircleAvatar(
                                       backgroundImage: NetworkImage(
-                                        "https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg",
+                                        userDataMap['imgUrl'],
                                       ),
                                       radius: 100.0,
                                     ),
@@ -82,19 +91,31 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '눈송이',
+                                      userDataMap['name'],
                                       style: TextStyle(
                                           fontSize: 14.0,
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xff333333)),
                                     ),
                                     Padding(padding: EdgeInsets.all(2.0)),
-                                    Text(
-                                      '여, 20대 초반',
-                                      style: TextStyle(
-                                          fontSize: 12.0,
-                                          color: Color(0xff666666)),
-                                    ),
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          userDataMap['profileDto']['sex']=="FEMALE"? '여, ': '남, ',
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Color(0xff666666)),
+                                        ),
+                                        Text(
+                                            (2023-int.parse(userDataMap['profileDto']['birthYear'])).toString(),
+                                          style: TextStyle(
+                                              fontSize: 12.0,
+                                              color: Color(0xff666666)),
+                                        ),
+                                      ],
+                                    )
+
                                   ],
                                 )
                               ],
@@ -111,7 +132,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                 ),
                                 Padding(padding: EdgeInsets.all(2.0)),
                                 Text(
-                                  '80',
+                                  userDataMap['profileDto']['score'].toString(),
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
@@ -131,7 +152,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                "마라탕 먹으러 가실 분 구합니다",
+                                dataMap['title'],
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 18.0,
@@ -161,7 +182,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                           27 /
                                           100,
                                       child: Text(
-                                        '지역',
+                                        "지역",
                                         style: TextStyle(
                                             fontSize: 14.0,
                                             color: Color(0xff333333),
@@ -170,7 +191,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     ),
                                     Padding(padding: EdgeInsets.all(10.0)),
                                     Container(
-                                        child: Text("용산구",
+                                        child: Text(dataMap['planInfo']['location'],
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Color(0xff333333)))),
@@ -194,7 +215,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     ),
                                     Padding(padding: EdgeInsets.all(10.0)),
                                     Container(
-                                        child: Text("탕화쿵푸 숙대점",
+                                        child: Text(dataMap['planInfo']['restaurant'],
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Color(0xff333333)))),
@@ -218,7 +239,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     ),
                                     Padding(padding: EdgeInsets.all(10.0)),
                                     Container(
-                                        child: Text("중식",
+                                        child: Text(dataMap['planInfo']['foodType'],
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Color(0xff333333)))),
@@ -242,7 +263,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     ),
                                     Padding(padding: EdgeInsets.all(10.0)),
                                     Container(
-                                        child: Text("2022/08/28 13:00",
+                                        child: Text(dataMap['planInfo']['appointmentTime'],
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Color(0xff333333)))),
@@ -266,36 +287,36 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                     ),
                                     Padding(padding: EdgeInsets.all(10.0)),
                                     Container(
-                                        child: Text("2",
+                                        child: Text(dataMap['planInfo']['numOfParticipants'].toString(),
                                             style: TextStyle(
                                                 fontSize: 14.0,
                                                 color: Color(0xff333333)))),
                                   ],
                                 ),
-                                Padding(padding: EdgeInsets.all(5.0)),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          27 /
-                                          100,
-                                      child: Text(
-                                        '오픈 채팅방 링크',
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Color(0xff333333),
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    Padding(padding: EdgeInsets.all(10.0)),
-                                    Container(
-                                        child: Text("",
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: Color(0xff333333)))),
-                                  ],
-                                ),
+                                // Padding(padding: EdgeInsets.all(5.0)),
+                                // Row(
+                                //   crossAxisAlignment: CrossAxisAlignment.center,
+                                //   children: [
+                                //     Container(
+                                //       width: MediaQuery.of(context).size.width *
+                                //           27 /
+                                //           100,
+                                //       child: Text(
+                                //         '오픈 채팅방 링크',
+                                //         style: TextStyle(
+                                //             fontSize: 14.0,
+                                //             color: Color(0xff333333),
+                                //             fontWeight: FontWeight.w600),
+                                //       ),
+                                //     ),
+                                //     Padding(padding: EdgeInsets.all(10.0)),
+                                //     Container(
+                                //         child: Text(dataMap['chatRoomLink'],
+                                //             style: TextStyle(
+                                //                 fontSize: 14.0,
+                                //                 color: Color(0xff333333)))),
+                                //   ],
+                                // ),
                               ],
                             ),
                           ),
@@ -310,7 +331,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                               width:
                                   MediaQuery.of(context).size.width * 80 / 100,
                               height: 150.0,
-                              child: Text("저랑 마라탕 같이 먹어 주세요!",
+                              child: Text(dataMap['content'],
                                   style: TextStyle(
                                       fontSize: 15.0,
                                       color: Color(0xff333333))))
@@ -332,9 +353,60 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                 fontSize: 16.0),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            // _requestMeal() //글의 아이디
           },
         ),
+      ),
+    );
+  }
+
+  _requestMeal(String id) async {
+    var url = Uri.http('${serverHttp}:8080', '/registerHistory/new');
+
+    final data = jsonEncode({'planId': id});
+
+    var response = await http.post(url, body: data, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    // print(url);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(response.body);
+      dynamic data=body["response"];
+
+      if(data["success"]==true){
+        _showDialog("신청 성공", "신청이 성공하였습니다");
+      }
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  void _showDialog(String title, text) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Text(text),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: const Text('확인'),
+          ),
+        ],
       ),
     );
   }

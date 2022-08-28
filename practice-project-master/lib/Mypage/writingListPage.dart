@@ -17,6 +17,8 @@ class WritingListPage extends StatefulWidget {
 }
 
 class _WritingListPageState extends State<WritingListPage> {
+  var _data;
+  var _userData;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +57,7 @@ class _WritingListPageState extends State<WritingListPage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (_) =>
-                                                  ReadBoardPage()));
+                                                  ReadBoardPage(data: _data, userData: _userData,)));
                                     },
                                     child: Container(
                                         height: MediaQuery.of(context)

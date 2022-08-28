@@ -1,10 +1,18 @@
+import 'dart:convert';
+
+import 'package:T4/Login/login.dart';
 import 'package:T4/Mypage/mypageMain.dart';
 import 'package:T4/mainBoard/createBoard.dart';
 import 'package:T4/mainBoard/readBoard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:T4/color.dart';
+import 'package:T4/server.dart';
+
+// var authToken = '';
+// var refreshToken = '';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,13 +21,25 @@ import '../Login/refreshToken.dart';
 import '../server.dart';
 
 class MainBoardPage extends StatefulWidget {
-  const MainBoardPage({Key? key}) : super(key: key);
+  final List data;
+  const MainBoardPage({Key? key, required this.data}) : super(key: key);
 
   @override
   State<MainBoardPage> createState() => _MainBoardPageState();
 }
 
 class _MainBoardPageState extends State<MainBoardPage> {
+  List<String> _title=['마라탕 먹으러', '가실 분', '구합니다.','마라탕 먹으러', '가실 분', '구합니다.','마라탕 먹으러', '가실 분', '구합니다.'];
+  List<String> _location=['탕화쿵푸','라화방','리또리또','서브웨이','탕화쿵푸','라화방','리또리또','서브웨이','탕화쿵푸','라화방'];
+  List<String> _time=['2022.08.28 13:00','2022.08.28 12:00','2022.08.28 13:00','2022.08.30 13:00','2022.08.29 13:30','2022.08.28 13:00','2022.08.28 13:10','2022.08.28 13:40','2022.08.28 13:00','2022.08.28 13:00',];
+  List<String> _total=['1','2','3','2','8','2','9','2','2','1'];
+  List<String> _current=['1','1','1','2','4','2','6','2','2','1',];
+
+  late var dataMap=widget.data;
+  var readBoardData;
+  var readBoardUserData;
+
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
   final _regionList = [
     '종로구',
     '중구',
@@ -48,6 +68,8 @@ class _MainBoardPageState extends State<MainBoardPage> {
     '강동구'
   ];
   String _selectRegion = '용산구';
+  
+
 
   String imgUrl = "";
   String userName = "";
@@ -291,15 +313,16 @@ class _MainBoardPageState extends State<MainBoardPage> {
                       child: Column(
                         children: [
                           ...List.generate(
-                              10,
+                              dataMap.length,
                               (idx) => Container(
                                     child: InkWell(
-                                      onTap: () {
+                                      onTap: () async{
+                                        await _readBoard(dataMap[idx]['postId'].toString());
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                    ReadBoardPage()));
+                                                    ReadBoardPage(data: readBoardData, userData: readBoardUserData,)));
                                       },
                                       child: Container(
                                           height: MediaQuery.of(context)
@@ -345,7 +368,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                                         .all(
                                                                             2.0)),
                                                             Text(
-                                                                '마라탕 먹으러 가실 분 구합니다.',
+                                                                dataMap[idx]['postTitle'],
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         16.0,
@@ -374,7 +397,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                                 EdgeInsets
                                                                     .all(
                                                                     2.0)),
-                                                            Text('탕화쿵푸 숙대점',
+                                                            Text(dataMap[idx]['restaurant'],
                                                                 style: TextStyle(
                                                                     fontSize:
                                                                         14.0,
@@ -405,7 +428,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                                         .all(
                                                                             2.5)),
                                                             Text(
-                                                              '2022.08.28 13:00',
+                                                              dataMap[idx]['appointmentTime'],
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       14.0,
@@ -431,7 +454,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                               'images/promise.png'),
                                                         ),
                                                         Text(
-                                                          "1/2",
+                                                          '${dataMap[idx]['numOfPermittedMember']}/${dataMap[idx]['numOfParticipants']}',
                                                           style: TextStyle(
                                                               fontSize: 20.0,
                                                               color: Color(
@@ -459,4 +482,111 @@ class _MainBoardPageState extends State<MainBoardPage> {
       ),
     );
   }
+
+  _readBoard(String id) async{
+    var url = Uri.http('${serverHttp}:8080', '/post/${id}');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    // print(url);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+      dynamic data=body["response"];
+
+      print(data);
+      readBoardData=data;
+      await _getWriterInfo(readBoardData['planInfo']['leadId']);
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  _userInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/info');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("authToken: ${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+
+
+
+    } else {
+      print('error : ${response.reasonPhrase}');
+    }
+  }
+
+  _getWriterInfo(String id) async{  //get이라 수정 필요
+    Uri.encodeComponent(id);
+    Map<String, String> _queryParameters = {
+      'leadId': id,
+    };
+
+    final data = jsonEncode({'location': id});
+    var url = Uri.http('${serverHttp}:8080', '/member/info', _queryParameters);
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    // print(url);
+    // print("Bearer ${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      // print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+      dynamic data=body["response"];
+      print(data);
+
+      readBoardUserData=data;
+
+    } else {
+      print('error : ${response.reasonPhrase}');
+    }
+  }
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    _title.add(("추가").toString());
+    if(mounted)
+      setState(() {
+
+      });
+    _refreshController.loadComplete();
+  }
+
 }
