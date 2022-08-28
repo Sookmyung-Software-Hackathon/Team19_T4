@@ -85,29 +85,34 @@ class _MainBoardPageState extends State<MainBoardPage> {
 
       var profileDto = data["profileDto"];
       print(profileDto);
-      // age = profileDto["birthYear"];
-      // age = 2023 - age;
-      //
-      // sex = profileDto["sex"].toString();
-      //
-      // if(sex == "FEMALE"){
-      //   sex = "여성";
-      // }else{
-      //   sex = "남성";
-      // }
-      //
-      // mbti = profileDto["mbti"].toString();
-      //
-      // if(profileDto["introduction"] == null){
-      //   introduce = "";
-      // }
-      // else{
-      //   introduce = profileDto["introduction"].toString();
-      // }
-      //
-      // score = profileDto["score"];
-      //
-      // print (imgUrl);
+      age = int.parse(profileDto["birthYear"]);
+      age = 2023 - age;
+
+      sex = profileDto["sex"].toString();
+
+      if(sex == "FEMALE"){
+        sex = "여성";
+      }else{
+        sex = "남성";
+      }
+
+      if(profileDto["mbti"] == null){
+        mbti = "";
+      }
+      else{
+        mbti = profileDto["mbti"].toString();
+      }
+
+      if(profileDto["introduction"] == null){
+        introduce = "";
+      }
+      else{
+        introduce = profileDto["introduction"].toString();
+      }
+
+      score = profileDto["score"];
+
+      print (imgUrl);
 
       Navigator.push(
         context,
