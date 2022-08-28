@@ -19,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   late String _id;
   late String _name;
   late String _pass;
-  bool _fgender = false;
+  bool _fgender = true;
   bool _mgender = false;
   final _birthList = [
     '1923',
@@ -131,13 +131,14 @@ class _SignUpPageState extends State<SignUpPage> {
       form.save();
       print('Form is valid: $_id, name: $_name, password: $_pass');
 
-      signUp(_id, _name, _pass);
+      String _gender=_fgender? "FEMALE":"MALE";
+      signUp(_id, _name, _pass, _gender, _selectBirth);
     } else {
       print('Form is invalid: $_id, name: $_name, password: $_pass');
     }
   }
 
-  void signUp(String id, name, pass) async {
+  void signUp(String id, name, pass, gender, birth) async {
     var url = Uri.http('${serverHttp}:8080', '/member/signup');
 
     final data = jsonEncode({'memberId': id, 'name': name, 'password': pass});
