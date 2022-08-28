@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../color.dart';
 import '../mainBoard/readBoard.dart';
 
 class WritingListPage extends StatefulWidget {
@@ -41,7 +42,8 @@ class _WritingListPageState extends State<WritingListPage> {
               Expanded(
                   child: SingleChildScrollView(
                     child: Container(
-                        padding: EdgeInsets.only(left: 30.0, right: 30.0, top: 5.0),
+                        padding:
+                        EdgeInsets.only(left: 30.0, right: 30.0, top: 5.0),
                         child: Column(
                           children: [
                             ...List.generate(
@@ -49,11 +51,16 @@ class _WritingListPageState extends State<WritingListPage> {
                                     (idx) => Container(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (_) => ReadBoardPage()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (_) =>
+                                                  ReadBoardPage()));
                                     },
                                     child: Container(
-                                        height: MediaQuery.of(context).size.height *
+                                        height: MediaQuery.of(context)
+                                            .size
+                                            .height *
                                             13 /
                                             100,
                                         decoration: BoxDecoration(
@@ -65,61 +72,130 @@ class _WritingListPageState extends State<WritingListPage> {
                                               )),
                                         ),
                                         child: Container(
-                                            margin:
-                                            EdgeInsets.only(left: 5.0, right: 5.0),
+                                            margin: EdgeInsets.only(
+                                                left: 5.0, right: 5.0),
                                             child: Row(
                                               mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment
+                                                  .spaceBetween,
                                               crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                               children: [
                                                 Column(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text('마라탕 먹으러 가실 분 구합니다.',
-                                                        style: TextStyle(
-                                                            fontSize: 16.0,
-                                                            color: Color(0xff333333),
-                                                            fontWeight:
-                                                            FontWeight.w600)),
-                                                    Padding(
-                                                        padding: EdgeInsets.all(2.0)),
-                                                    Text('탕화쿵푸 숙대점',
-                                                        style: TextStyle(
-                                                            fontSize: 14.0,
-                                                            color: Color(0xff333333))),
-                                                    Padding(
-                                                        padding: EdgeInsets.all(2.0)),
-                                                    Text(
-                                                      '2022.08.28 오후 1시',
-                                                      style: TextStyle(
-                                                          fontSize: 14.0,
-                                                          color: Color(0xff666666)),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment.center,
+                                                    MainAxisAlignment
+                                                        .center,
                                                     crossAxisAlignment:
-                                                    CrossAxisAlignment.end,
+                                                    CrossAxisAlignment
+                                                        .start,
                                                     children: [
+                                                      Row(
+                                                        children: [
+                                                          Icon(Icons
+                                                              .restaurant_menu_outlined,
+                                                            size: 22.0,
+                                                            color: Color(0xff999999),),
+                                                          Padding(
+                                                              padding:
+                                                              EdgeInsets
+                                                                  .all(
+                                                                  2.0)),
+                                                          Text(
+                                                              '마라탕 먹으러 가실 분 구합니다.',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  16.0,
+                                                                  color: Color(
+                                                                      0xff333333),
+                                                                  fontWeight:
+                                                                  FontWeight
+                                                                      .w600))
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                          EdgeInsets.only(
+                                                              bottom: 4.0)),
+                                                      Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .location_on_outlined,
+                                                            color: Color(
+                                                                greenColor),
+                                                            size: 20.0,
+                                                          ),
+                                                          Text('탕화쿵푸 숙대점',
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                  14.0,
+                                                                  color: Color(
+                                                                      0xff333333)))
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                          EdgeInsets.only(
+                                                              bottom: 4.0)),
+                                                      Row(
+                                                        children: [
+                                                          Padding(
+                                                              padding:
+                                                              EdgeInsets.only(
+                                                                  left: 2.0)),
+                                                          Icon(
+                                                            Icons
+                                                                .schedule_outlined,
+                                                            size: 16.0,
+                                                            color: Color(
+                                                                0xff666666),
+                                                          ),
+                                                          Padding(
+                                                              padding:
+                                                              EdgeInsets
+                                                                  .all(
+                                                                  2.0)),
+                                                          Text(
+                                                            '2022.08.28 13:00',
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                14.0,
+                                                                color: Color(
+                                                                    0xff666666)),
+                                                          ),
+                                                        ],
+                                                      )
+                                                    ]),
+                                                Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center,
+                                                    children: [
+                                                      Container(
+                                                        width: 18.0,
+                                                        margin:
+                                                        EdgeInsets.only(
+                                                            right: 3.0),
+                                                        child: Image.asset(
+                                                            'images/promise.png'),
+                                                      ),
                                                       Text(
                                                         "1/2",
                                                         style: TextStyle(
-                                                            fontSize: 22.0,
-                                                            color: Color(0xff333333)),
+                                                            fontSize: 20.0,
+                                                            color: Color(
+                                                                0xff333333)),
                                                       ),
                                                     ])
                                               ],
                                             ))),
-                                  ),))
+                                  ),
+                                ))
                           ],
                         )),
-                  ),
+                  )
               )
             ],
           ),

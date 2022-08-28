@@ -113,7 +113,13 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           )),
                           Container(
                               child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MyPage()),
+                              );
+                            },
                             child: Icon(
                               Icons.account_circle_outlined,
                               color: Color(greenColor),
