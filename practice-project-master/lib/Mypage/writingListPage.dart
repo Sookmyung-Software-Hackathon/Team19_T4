@@ -1,3 +1,4 @@
+import 'package:T4/Login/login.dart';
 import 'package:T4/Mypage/mypageEdit.dart';
 import 'package:T4/Mypage/mypageMain.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,10 @@ import '../color.dart';
 import '../mainBoard/readBoard.dart';
 
 class WritingListPage extends StatefulWidget {
-  const WritingListPage({Key? key}) : super(key: key);
+
+  final List<UserWritingList> writingList;
+
+  const WritingListPage({Key? key, required this.writingList}) : super(key: key);
 
   @override
   State<WritingListPage> createState() => _WritingListPageState();
@@ -46,8 +50,7 @@ class _WritingListPageState extends State<WritingListPage> {
                         EdgeInsets.only(left: 30.0, right: 30.0, top: 5.0),
                         child: Column(
                           children: [
-                            ...List.generate(
-                                10,
+                            ...List.generate(widget.writingList.length,
                                     (idx) => Container(
                                   child: InkWell(
                                     onTap: () {
@@ -101,7 +104,7 @@ class _WritingListPageState extends State<WritingListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                              '마라탕 먹으러 가실 분 구합니다.',
+                                                              '${widget.writingList[idx].postTitle}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   16.0,
@@ -125,7 +128,7 @@ class _WritingListPageState extends State<WritingListPage> {
                                                                 greenColor),
                                                             size: 20.0,
                                                           ),
-                                                          Text('탕화쿵푸 숙대점',
+                                                          Text('${widget.writingList[idx].restaurant}',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                   14.0,
@@ -156,7 +159,7 @@ class _WritingListPageState extends State<WritingListPage> {
                                                                   .all(
                                                                   2.0)),
                                                           Text(
-                                                            '2022.08.28 13:00',
+                                                            '${widget.writingList[idx].time.substring(0,4)}.${widget.writingList[idx].time.substring(5,7)}.${widget.writingList[idx].time.substring(8,10)} ${widget.writingList[idx].time.substring(11,13)}:${widget.writingList[idx].time.substring(14,16)}',
                                                             style: TextStyle(
                                                                 fontSize:
                                                                 14.0,
@@ -182,7 +185,7 @@ class _WritingListPageState extends State<WritingListPage> {
                                                             'images/promise.png'),
                                                       ),
                                                       Text(
-                                                        "1/2",
+                                                        "${widget.writingList[idx].checkNum}/${widget.writingList[idx].num}",
                                                         style: TextStyle(
                                                             fontSize: 20.0,
                                                             color: Color(
