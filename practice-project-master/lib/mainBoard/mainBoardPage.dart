@@ -14,6 +14,12 @@ import 'package:T4/server.dart';
 // var authToken = '';
 // var refreshToken = '';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../Login/login.dart';
+import '../Login/refreshToken.dart';
+import '../server.dart';
+
 class MainBoardPage extends StatefulWidget {
   final List data;
   const MainBoardPage({Key? key, required this.data}) : super(key: key);
@@ -64,6 +70,155 @@ class _MainBoardPageState extends State<MainBoardPage> {
   String _selectRegion = '용산구';
   
 
+
+  String imgUrl = "";
+  String userName = "";
+  String introduce = "";
+  String mbti = "";
+
+  int age = 0;
+  String sex = "";
+
+  String place = "";
+  String time = "";
+
+  int score = 0;
+
+  // 서버 연결
+  void userInfo() async {
+    RecentPromiseInfo();
+
+    var url = Uri.http('${serverHttp}:8080', '/member/info');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("Bearer ${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+      print("data: ${data}", );
+      imgUrl = data["imgUrl"].toString();
+      userName = data["name"].toString();
+
+      var profileDto = data["profileDto"];
+      print(profileDto);
+      age = int.parse(profileDto["birthYear"]);
+      age = 2023 - age;
+
+      sex = profileDto["sex"].toString();
+
+      if(sex == "FEMALE"){
+        sex = "여성";
+      }else{
+        sex = "남성";
+      }
+
+      if(profileDto["mbti"] == null){
+        mbti = "";
+      }
+      else{
+        mbti = profileDto["mbti"].toString();
+      }
+
+      if(profileDto["introduction"] == null){
+        introduce = "";
+      }
+      else{
+        introduce = profileDto["introduction"].toString();
+      }
+
+      score = profileDto["score"];
+
+      print (imgUrl);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score, place: place, time: time,)),
+      );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userInfo();
+        check = false;
+      }
+    }
+    else {
+
+      print('error : ${response.reasonPhrase}');
+    }
+  }
+
+  void RecentPromiseInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/plan/scheduled');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+
+      data = data["list"];
+
+      if(data.length != 0){
+        for(dynamic i in data){
+          place = i["restaurant"];
+          time = i["appointmentTime"];
+          time = time.substring(11, 16);
+          break;
+        }
+      }
+      else{
+        place = "";
+        time = "";
+      }
+
+
+//      print("시간은: ${time.substring(11,16)}");
+
+
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+      // );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userInfo();
+        check = false;
+      }
+    }
+    else {
+
+      print('error : ${response.reasonPhrase}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -137,11 +292,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           Container(
                               child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyPage()),
-                              );
+                              userInfo();
                             },
                             child: Icon(
                               Icons.account_circle_outlined,

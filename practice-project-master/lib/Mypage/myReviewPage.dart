@@ -8,18 +8,14 @@ import 'dart:convert';
 
 import 'package:percent_indicator/percent_indicator.dart';
 
-class ReviewList {
-  final int timeScore;
-  final int kindScore;
-  final String reviewStr;
-
-  ReviewList(this.timeScore, this.kindScore, this.reviewStr);
-}
-
-
 
 class MyReviewPage extends StatefulWidget {
-  const MyReviewPage({Key? key}) : super(key: key);
+
+  final int score;
+  final List<ReviewList1> reviewList1;
+  final List<ReviewList2> reviewList2;
+
+  const MyReviewPage({Key? key,required this.score, required this.reviewList1, required this.reviewList2}) : super(key: key);
 
   @override
   State<MyReviewPage> createState() => _MyReviewPageState();
@@ -28,12 +24,10 @@ class MyReviewPage extends StatefulWidget {
 class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMixin{
 
   final List<int> timeScores = <int>[5, 4, 2, 4, 3];
-  final List<int> kindScores = <int>[1, 3, 4, 1, 5];
 
   final List<String> reviewStrs = <String>["안녕하세요", "좋았습니다", "없습니다.", "", ""];
 
   final List<int> timeScores2 = <int>[2, 1, 5, 4, 3];
-  final List<int> kindScores2 = <int>[1, 3, 4, 1, 5];
 
   final List<String> reviewStrs2 = <String>["안녕하세요", "좋았습니다", "없습니다.", "", ""];
 
@@ -121,7 +115,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                                       fontSize: 14.0,
                                     ),
                                   ),
-                                  Text("80",
+                                  Text("${widget.score}",
                                     style: TextStyle(
                                       color: Color(0xff6ACC80),
                                       fontSize: 16.0,
@@ -137,7 +131,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                               animation: true,
                               lineHeight: 10.0,
                               animationDuration: 2500,
-                              percent: 0.8,
+                              percent: widget.score / 100,
                               //center: Text("80.0%"),
                               barRadius: const Radius.circular(15),
                               progressColor: Color(0xff6ACC80),
@@ -179,7 +173,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
               Container(
                 margin: EdgeInsets.only(top: 30, left: 30, right: 30),
                 child: ListView.builder(
-                  itemCount: timeScores.length,
+                  itemCount: widget.reviewList1.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       margin: EdgeInsets.only(bottom: 25.0),
@@ -191,38 +185,21 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                         padding: EdgeInsets.all(25),
                         //alignment: Alignment.center,
                         width: double.infinity,
-                        height: 250.0,
+                        height: 230.0,
                         child: Column(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(bottom: 15),
+                              margin: EdgeInsets.only(bottom: 20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("시간 약속을 잘 지켜요",
+                                  Text("만족하셨나요",
                                     style: TextStyle(
                                       color: Color(0xff333333),
                                       fontSize: 12.0,
                                     ),
                                   ),
-                                  getScoreImage(timeScores[index])
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("시간 약속을 잘 지켜요",
-                                    style: TextStyle(
-                                      color: Color(0xff333333),
-                                      fontSize: 12.0,
-                                    ),
-                                  ),
-
-                                  getScoreImage(kindScores[index])
-
+                                  getScoreImage(widget.reviewList1[index].Score)
                                 ],
                               ),
                             ),
@@ -255,7 +232,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                                       color: Color(0xffFFFFFF),
                                       borderRadius: BorderRadius.all(Radius.circular(10))
                                     ),
-                                    child: Text("${reviewStrs[index]}",
+                                    child: Text("${widget.reviewList1[index].reviewStr}",
                                       style: TextStyle(
                                         color: Color(0xff333333),
                                         fontSize: 12.0,
@@ -277,7 +254,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
               Container(
                 margin: EdgeInsets.only(top: 30, left: 30, right: 30),
                 child: ListView.builder(
-                  itemCount: timeScores2.length,
+                  itemCount: widget.reviewList2.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
                       margin: EdgeInsets.only(bottom: 25.0),
@@ -289,38 +266,21 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                           padding: EdgeInsets.all(25),
                           //alignment: Alignment.center,
                           width: double.infinity,
-                          height: 250.0,
+                          height: 230.0,
                           child: Column(
                             children: [
                               Container(
-                                margin: EdgeInsets.only(bottom: 15),
+                                margin: EdgeInsets.only(bottom: 20),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text("시간 약속을 잘 지켜요",
+                                    Text("만족하셨나요",
                                       style: TextStyle(
                                         color: Color(0xff333333),
                                         fontSize: 12.0,
                                       ),
                                     ),
-                                    getScoreImage(timeScores2[index])
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(bottom: 15),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text("시간 약속을 잘 지켜요",
-                                      style: TextStyle(
-                                        color: Color(0xff333333),
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-
-                                    getScoreImage(kindScores2[index])
-
+                                    getScoreImage(widget.reviewList2[index].Score)
                                   ],
                                 ),
                               ),
@@ -353,7 +313,7 @@ class _MyReviewPageState extends State<MyReviewPage> with TickerProviderStateMix
                                           color: Color(0xffFFFFFF),
                                           borderRadius: BorderRadius.all(Radius.circular(10))
                                       ),
-                                      child: Text("${reviewStrs2[index]}",
+                                      child: Text("${widget.reviewList2[index].reviewStr}",
                                         style: TextStyle(
                                           color: Color(0xff333333),
                                           fontSize: 12.0,

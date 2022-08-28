@@ -2,6 +2,7 @@ import 'package:T4/Mypage/mypageEdit.dart';
 import 'package:T4/Mypage/participationListPage.dart';
 import 'package:T4/Mypage/waitingListPage.dart';
 import 'package:T4/Mypage/writingListPage.dart';
+import 'package:T4/server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,16 +11,154 @@ import 'dart:convert';
 
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../Login/login.dart';
+import '../Login/refreshToken.dart';
 import 'myReviewPage.dart';
 
+
+class ReviewList1 {
+  final int Score;
+  final String reviewStr;
+
+  ReviewList1(this.Score, this.reviewStr);
+}
+
+class ReviewList2 {
+  final int Score;
+  final String reviewStr;
+
+  ReviewList2(this.Score, this.reviewStr);
+}
+
 class MyPage extends StatefulWidget {
-  const MyPage({Key? key}) : super(key: key);
+
+  final String imgURL;
+  final String userName;
+  final String introduce;
+
+  final String mbti;
+  final int age;
+  final String sex;
+
+  // 배부름 지수
+  final int score;
+
+  final String place;
+  final String time;
+
+  // 진행 중인 밥 때 시간 [list]
+  // 진행 중인 밥 때 수
+  // 진행 중인 밥 때 장소
+
+
+  const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score, required this.place, required this.time}) : super(key: key);
+
 
   @override
   State<MyPage> createState() => _MyPageState();
 }
 
 class _MyPageState extends State<MyPage> {
+
+  final reviewlist1 = new List<ReviewList1>.empty(growable: true);
+  final reviewlist2 = new List<ReviewList2>.empty(growable: true);
+
+  void writtenListInfo() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/review/target');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      print("${data}");
+      reviewlist1.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["score"];
+          String b = i["comment"];
+          reviewlist1.add(ReviewList1(a, b));
+        }
+      }
+
+      print("reviewList1: ${reviewlist1}");
+
+      writingListInfo();
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (_) => my)
+      // );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        writtenListInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
+  void writingListInfo() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/review/writer');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      reviewlist2.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["score"];
+          String b = i["comment"];
+          reviewlist2.add(ReviewList2(a, b));
+        }
+      }
+
+      print("vowelList: ${reviewlist2}");
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => MyReviewPage(score: widget.score, reviewList1: reviewlist1, reviewList2: reviewlist2))
+      );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        writingListInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +203,7 @@ class _MyPageState extends State<MyPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MyPageEdit()),
+                                        builder: (context) => MyPageEdit(name: widget.userName, imageURL: widget.imgURL, mbti: widget.mbti, introduction: widget.introduce,)),
                                   );
                                 }, icon: Icon(Icons.edit))
                               ],
@@ -72,7 +211,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                            "https://user-images.githubusercontent.com/61380136/187037733-a81beb82-721e-4ed2-a05d-7a7fbda7d98d.png",
+                            "${widget.imgURL}",
                           ),
                           radius: 100.0,
                         ),
@@ -84,7 +223,7 @@ class _MyPageState extends State<MyPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("김도은",
+                              Text("${widget.userName}",
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w800,
@@ -99,7 +238,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text("저는 혼자 밥 먹는 것을 좋아합니다.",
+                          child: Text("${widget.introduce}",
                               style: TextStyle(
                                   fontSize: 16.0,
                                   color: Color(0xff111111),
@@ -135,7 +274,7 @@ class _MyPageState extends State<MyPage> {
                                         height: 10.0,
                                       ),
                                       Text(
-                                        "ENTJ",
+                                        "${widget.mbti}",
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             color: Color(0xff333333),
@@ -160,7 +299,7 @@ class _MyPageState extends State<MyPage> {
                                       height: 10.0,
                                     ),
                                     Text(
-                                      "23",
+                                      "${widget.age}",
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -184,7 +323,7 @@ class _MyPageState extends State<MyPage> {
                                       height: 10.0,
                                     ),
                                     Text(
-                                      "여",
+                                      "${widget.sex}",
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -223,7 +362,7 @@ class _MyPageState extends State<MyPage> {
                             fontSize: 14.0,
                           ),
                         ),
-                        Text("80",
+                        Text("${widget.score}",
                           style: TextStyle(
                             color: Color(0xff6ACC80),
                             fontSize: 16.0,
@@ -245,11 +384,12 @@ class _MyPageState extends State<MyPage> {
                             // TODO 후기보기 동작 넣기
                             print("후기 보기");
                             //Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyReviewPage()),
-                            );
+                            writtenListInfo();
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => MyReviewPage()),
+                            // );
 
                           },
                           child: Text("후기 보기 >",
@@ -268,7 +408,7 @@ class _MyPageState extends State<MyPage> {
                         animation: true,
                         lineHeight: 10.0,
                         animationDuration: 2500,
-                        percent: 0.8,
+                        percent: widget.score / 100,
                         //center: Text("80.0%"),
                         barRadius: const Radius.circular(15),
                         progressColor: Color(0xff6ACC80),
@@ -300,7 +440,7 @@ class _MyPageState extends State<MyPage> {
                         children: [
                           Container(
                               margin:EdgeInsets.only(bottom: 5),
-                              child: Text("진행중인 밥 때 [3]",
+                              child: Text("진행중인 밥 때",
                                 style: TextStyle(
                                   color: Color(0xff333333),
                                   fontSize: 14.0,
@@ -317,7 +457,7 @@ class _MyPageState extends State<MyPage> {
                         children: [
                           Container(
                             //margin: EdgeInsets.only(left: 15.0),
-                            child: Text("15:30",
+                            child: Text("${widget.time}",
                               style: TextStyle(
                                 color: Color(0xff333333),
                                 fontSize: 30.0,
@@ -334,7 +474,7 @@ class _MyPageState extends State<MyPage> {
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width - 250,
                             margin: EdgeInsets.only(left: 15.0, right: 30.0),
-                            child: Text("청파동 신내떡",
+                            child: Text("${widget.place}",
                               maxLines:1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
