@@ -198,6 +198,8 @@ class _MyPageEditState extends State<MyPageEdit> {
       );
 
       Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(
