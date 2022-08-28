@@ -43,12 +43,15 @@ class MyPage extends StatefulWidget {
   // 배부름 지수
   final int score;
 
+  final String place;
+  final String time;
+
   // 진행 중인 밥 때 시간 [list]
   // 진행 중인 밥 때 수
   // 진행 중인 밥 때 장소
 
 
-  const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score}) : super(key: key);
+  const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score, required this.place, required this.time}) : super(key: key);
 
 
   @override
@@ -437,7 +440,7 @@ class _MyPageState extends State<MyPage> {
                         children: [
                           Container(
                               margin:EdgeInsets.only(bottom: 5),
-                              child: Text("진행중인 밥 때 [3]",
+                              child: Text("진행중인 밥 때",
                                 style: TextStyle(
                                   color: Color(0xff333333),
                                   fontSize: 14.0,
@@ -454,7 +457,7 @@ class _MyPageState extends State<MyPage> {
                         children: [
                           Container(
                             //margin: EdgeInsets.only(left: 15.0),
-                            child: Text("15:30",
+                            child: Text("${widget.time}",
                               style: TextStyle(
                                 color: Color(0xff333333),
                                 fontSize: 30.0,
@@ -471,7 +474,7 @@ class _MyPageState extends State<MyPage> {
                             alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width - 250,
                             margin: EdgeInsets.only(left: 15.0, right: 30.0),
-                            child: Text("청파동 신내떡",
+                            child: Text("${widget.place}",
                               maxLines:1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
