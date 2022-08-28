@@ -198,6 +198,7 @@ class _LoginPageState extends State<LoginPage> {
         refreshToken = data["refreshToken"];
         print("로그인에 성공하셨습니다.");
         authToken = token;
+        print("authToken: ${authToken}");
 
         userInfo();
         Navigator.pop(context);

@@ -21,7 +21,7 @@ void main() {
     ],
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
-      '/login': (BuildContext context) => new MainBoardPage()
+      '/login': (BuildContext context) => new LoginPage()
     },
   ));
 }

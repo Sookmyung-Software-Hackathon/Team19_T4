@@ -6,6 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:T4/color.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../Login/login.dart';
+import '../Login/refreshToken.dart';
+import '../server.dart';
+
 class MainBoardPage extends StatefulWidget {
   const MainBoardPage({Key? key}) : super(key: key);
 
@@ -42,6 +48,86 @@ class _MainBoardPageState extends State<MainBoardPage> {
     '강동구'
   ];
   String _selectRegion = '용산구';
+
+  String imgUrl = "";
+  String userName = "";
+  String introduce = "";
+  String mbti = "";
+
+  int age = 0;
+  String sex = "";
+
+  int score = 0;
+
+  // 서버 연결
+  void userInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/info');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("Bearer ${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+      print("data: ${data}", );
+      imgUrl = data["imgUrl"].toString();
+      userName = data["name"].toString();
+
+      var profileDto = data["profileDto"];
+      print(profileDto);
+      // age = profileDto["birthYear"];
+      // age = 2023 - age;
+      //
+      // sex = profileDto["sex"].toString();
+      //
+      // if(sex == "FEMALE"){
+      //   sex = "여성";
+      // }else{
+      //   sex = "남성";
+      // }
+      //
+      // mbti = profileDto["mbti"].toString();
+      //
+      // if(profileDto["introduction"] == null){
+      //   introduce = "";
+      // }
+      // else{
+      //   introduce = profileDto["introduction"].toString();
+      // }
+      //
+      // score = profileDto["score"];
+      //
+      // print (imgUrl);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+      );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userInfo();
+        check = false;
+      }
+    }
+    else {
+
+      print('error : ${response.reasonPhrase}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +200,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           Container(
                               child: InkWell(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyPage()),
-                              );
+                              userInfo();
                             },
                             child: Icon(
                               Icons.account_circle_outlined,
