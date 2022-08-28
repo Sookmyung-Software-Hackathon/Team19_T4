@@ -47,12 +47,12 @@ class _MyPageEditState extends State<MyPageEdit> {
               onPressed: () {
                 print("저장");
                 Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyPage()),
-                );
+                // Navigator.pop(context);
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //       builder: (context) => MyPage()),
+                // );
                 // TODO dialog show
                 showDialog<String>(
                   context: context,

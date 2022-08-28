@@ -19,6 +19,10 @@ class ReviewList {
 
 
 class MyReviewPage extends StatefulWidget {
+
+  // final int score;
+  // final List<>
+
   const MyReviewPage({Key? key}) : super(key: key);
 
   @override

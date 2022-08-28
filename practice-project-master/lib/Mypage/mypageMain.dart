@@ -13,7 +13,27 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'myReviewPage.dart';
 
 class MyPage extends StatefulWidget {
-  const MyPage({Key? key}) : super(key: key);
+
+  final String imgURL;
+  final String userName;
+  final String introduce;
+
+  final String mbti;
+  final int age;
+  final String sex;
+
+  // 배부름 지수
+  final int score;
+
+  // 진행 중인 밥 때 시간 [list]
+  // 진행 중인 밥 때 수
+  // 진행 중인 밥 때 장소
+
+
+
+
+  const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score}) : super(key: key);
+
 
   @override
   State<MyPage> createState() => _MyPageState();
@@ -72,7 +92,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                            "https://user-images.githubusercontent.com/61380136/187037733-a81beb82-721e-4ed2-a05d-7a7fbda7d98d.png",
+                            "${widget.imgURL}",
                           ),
                           radius: 100.0,
                         ),
@@ -84,7 +104,7 @@ class _MyPageState extends State<MyPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("김도은",
+                              Text("${widget.userName}",
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w800,
@@ -99,7 +119,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         Container(
                           margin: EdgeInsets.only(bottom: 10),
-                          child: Text("저는 혼자 밥 먹는 것을 좋아합니다.",
+                          child: Text("${widget.introduce}",
                               style: TextStyle(
                                   fontSize: 16.0,
                                   color: Color(0xff111111),
@@ -135,7 +155,7 @@ class _MyPageState extends State<MyPage> {
                                         height: 10.0,
                                       ),
                                       Text(
-                                        "ENTJ",
+                                        "${widget.mbti}",
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             color: Color(0xff333333),
@@ -160,7 +180,7 @@ class _MyPageState extends State<MyPage> {
                                       height: 10.0,
                                     ),
                                     Text(
-                                      "23",
+                                      "${widget.age}",
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -184,7 +204,7 @@ class _MyPageState extends State<MyPage> {
                                       height: 10.0,
                                     ),
                                     Text(
-                                      "여",
+                                      "${widget.sex}",
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.w600,
@@ -223,7 +243,7 @@ class _MyPageState extends State<MyPage> {
                             fontSize: 14.0,
                           ),
                         ),
-                        Text("80",
+                        Text("${widget.score}",
                           style: TextStyle(
                             color: Color(0xff6ACC80),
                             fontSize: 16.0,
@@ -268,7 +288,7 @@ class _MyPageState extends State<MyPage> {
                         animation: true,
                         lineHeight: 10.0,
                         animationDuration: 2500,
-                        percent: 0.8,
+                        percent: widget.score / 100,
                         //center: Text("80.0%"),
                         barRadius: const Radius.circular(15),
                         progressColor: Color(0xff6ACC80),
