@@ -2,6 +2,7 @@ import 'package:T4/Mypage/mypageEdit.dart';
 import 'package:T4/Mypage/participationListPage.dart';
 import 'package:T4/Mypage/waitingListPage.dart';
 import 'package:T4/Mypage/writingListPage.dart';
+import 'package:T4/server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +11,24 @@ import 'dart:convert';
 
 import 'package:percent_indicator/percent_indicator.dart';
 
+import '../Login/login.dart';
+import '../Login/refreshToken.dart';
 import 'myReviewPage.dart';
+
+
+class ReviewList1 {
+  final int Score;
+  final String reviewStr;
+
+  ReviewList1(this.Score, this.reviewStr);
+}
+
+class ReviewList2 {
+  final int Score;
+  final String reviewStr;
+
+  ReviewList2(this.Score, this.reviewStr);
+}
 
 class MyPage extends StatefulWidget {
 
@@ -30,8 +48,6 @@ class MyPage extends StatefulWidget {
   // 진행 중인 밥 때 장소
 
 
-
-
   const MyPage({Key? key, required this.imgURL, required this.userName, required this.introduce, required this.mbti, required this.age, required this.sex, required this.score}) : super(key: key);
 
 
@@ -40,6 +56,106 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+
+  final reviewlist1 = new List<ReviewList1>.empty(growable: true);
+  final reviewlist2 = new List<ReviewList2>.empty(growable: true);
+
+  void writtenListInfo() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/review/target');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      print("${data}");
+      reviewlist1.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["score"];
+          String b = i["comment"];
+          reviewlist1.add(ReviewList1(a, b));
+        }
+      }
+
+      print("reviewList1: ${reviewlist1}");
+
+      writingListInfo();
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (_) => my)
+      // );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        writtenListInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
+  void writingListInfo() async {
+
+    var url = Uri.http('${serverHttp}:8080', '/review/writer');
+
+    var response = await http.get(url, headers: {'Accept': 'application/json', "content-type": "application/json", "X-AUTH-TOKEN": "${authToken}" });
+
+    print(url);
+    print("response: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      dynamic data = body["response"];
+
+      reviewlist2.clear();
+      if(data.length != 0){
+        for(dynamic i in data){
+          int a = i["score"];
+          String b = i["comment"];
+          reviewlist2.add(ReviewList2(a, b));
+        }
+      }
+
+      print("vowelList: ${reviewlist2}");
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: (_) => MyReviewPage(score: widget.score, reviewList1: reviewlist1, reviewList2: reviewlist2))
+      );
+
+      // urlInfo(letter, letterId);
+
+    }
+    else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        writingListInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -265,11 +381,12 @@ class _MyPageState extends State<MyPage> {
                             // TODO 후기보기 동작 넣기
                             print("후기 보기");
                             //Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MyReviewPage()),
-                            );
+                            writtenListInfo();
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => MyReviewPage()),
+                            // );
 
                           },
                           child: Text("후기 보기 >",
