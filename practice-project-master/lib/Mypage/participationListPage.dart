@@ -17,6 +17,9 @@ class ParticipationListPage extends StatefulWidget {
 }
 
 class _ParticipationListPageState extends State<ParticipationListPage> {
+  var _data;
+  var _userData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +54,7 @@ class _ParticipationListPageState extends State<ParticipationListPage> {
                                     (idx) => Container(
                                   child: InkWell(
                                     onTap: () {
-                                      Navigator.push( context,MaterialPageRoute( builder: (_) => ReadBoardPage()));
+                                      Navigator.push( context,MaterialPageRoute( builder: (_) => ReadBoardPage(data: _data,userData: _userData,)));
                                     },
                                     child: Container(
                                         height: MediaQuery.of(context).size.height * 13 / 100,

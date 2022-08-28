@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:T4/server.dart';
 import 'package:T4/color.dart';
 import 'login.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -139,9 +140,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void signUp(String id, name, pass, gender, birth) async {
+    Map<String, String> _profileDto=<String, String>{
+      'birthYear':birth,
+      'sex':gender,
+      'mbti':''
+    };
+
     var url = Uri.http('${serverHttp}:8080', '/member/signup');
 
-    final data = jsonEncode({'memberId': id, 'name': name, 'password': pass});
+    final data = jsonEncode({'memberId': id, 'name': name, 'password': pass, 'profileDto': _profileDto});
 
     var response = await http.post(url, body: data, headers: {
       'Accept': 'application/json',

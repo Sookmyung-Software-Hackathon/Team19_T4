@@ -178,14 +178,14 @@ class _LoginPageState extends State<LoginPage> {
         authToken = token;
 
 
-        // await _boardList("종로구");
+        await _boardList("강남구");
 
+        print(res);
         // Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainBoardPage(data: data)), //더미 데이터 넣어야함
+          MaterialPageRoute(builder: (context) => MainBoardPage(data: res,)),
         );
-        //data: res
       }
     } else if(response.statusCode == 400){
       print('Response status: ${response.statusCode}');
@@ -210,18 +210,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _boardList(String loc) async{
-    Map<String,String> gu=<String,String>{
-      "gu": loc
+    Uri.encodeComponent(loc);
+    Map<String, dynamic> _queryParameters = <String, dynamic>{
+      'location': {'gu': loc}
     };
+    Uri.encodeComponent(loc);
 
-    Map<String, dynamic> _queryParameters = <String,dynamic>{
-      'location':gu
-    };
+    String jsonString=jsonEncode(_queryParameters);
 
-    var url = Uri.http('${serverHttp}:8080', '/post/location', _queryParameters);
-    // final data = jsonEncode({"location": gu});
+    print(jsonEncode(_queryParameters));
 
-    var response = await http.get(url, headers: {
+    // jsonDecode(jsonString);
+    var url = Uri.http('${serverHttp}:8080', '/post/location');
+
+    var response = await http.post(url, body: jsonString,headers: {
       'Accept': 'application/json',
       "content-type": "application/json",
       "X-AUTH-TOKEN": "${authToken}"
@@ -233,8 +235,8 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
-      var body = jsonDecode(response.body);
-      dynamic data=body["response"];
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+      dynamic data=body["response"]['list'];
 
       res=data;
     }

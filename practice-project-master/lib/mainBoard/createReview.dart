@@ -1,6 +1,9 @@
 import 'package:T4/color.dart';
+import 'package:T4/server.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CreateReviewPage extends StatefulWidget {
   const CreateReviewPage({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class CreateReviewPage extends StatefulWidget {
 
 class _CreateReviewPageState extends State<CreateReviewPage> {
   late String _good;
+  late double _rating;
 
   @override
   Widget build(BuildContext context) {
@@ -91,40 +95,7 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                                 EdgeInsets.symmetric(horizontal: 5.0),
                                 onRatingUpdate: (rating) {
                                   print(rating);
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            "친절해요",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w600,
-                              color: Color(0xff333333),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 20.0, bottom: 40.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RatingBar(
-                                initialRating: 3,
-                                direction: Axis.horizontal,
-                                allowHalfRating: false,
-                                itemCount: 5,
-                                ratingWidget: RatingWidget(
-                                  full: Image.asset('images/rice_fill.png'),
-                                  half: Image.asset('images/rice_fill.png'),
-                                  empty: Image.asset('images/rice.png'),
-                                ),
-                                itemPadding:
-                                EdgeInsets.symmetric(horizontal: 4.0),
-                                onRatingUpdate: (rating) {
-                                  print(rating);
+                                  _rating=rating;
                                 },
                               )
                             ],
@@ -152,7 +123,7 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                           height: MediaQuery.of(context).size.height * 10 / 100,
                           child: TextFormField(
                             validator: (value) =>
-                                value!.isEmpty ? '음식점 이름을 입력해주세요.' : null,
+                                value!.isEmpty ? null : null,
                             onSaved: (value) => _good = value!,
                             decoration: InputDecoration(
                               enabledBorder: UnderlineInputBorder(
@@ -186,10 +157,65 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                 fontSize: 16.0),
           ),
           onPressed: () {
-            Navigator.pop(context);
+            _postReview(_good, "test1234", _rating.toInt());
           },
         ),
       ),
+    );
+  }
+
+  _postReview(String comment, id, int score) async {
+    var url = Uri.http('${serverHttp}:8080', '/member/signup');
+
+    final data = jsonEncode({'score': score, 'comment': comment, 'targetId': id});
+
+    var response = await http.post(url, body: data, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json"
+    });
+
+    // print(url);
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(response.body);
+      dynamic data=body['response'];
+
+      if (body["success"] == true) {
+        _showDialog("작성 완료", data['message']);
+      }
+      // else {
+      //   _showDialog("작성 실패", data['message']);
+      // }
+
+    } else {
+      print('error : ${response.reasonPhrase}');
+    }
+  }
+
+  void _showDialog(String title, text) {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            content: Text(text),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+                child: const Text('확인'),
+              ),
+            ],
+          ),
     );
   }
 }
