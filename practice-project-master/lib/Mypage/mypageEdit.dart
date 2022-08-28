@@ -9,14 +9,16 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+import '../Login/refreshToken.dart';
 import '../server.dart';
 
 class MyPageEdit extends StatefulWidget {
+  final String name;
   final String imageURL;
   final String mbti;
   final String introduction;
 
-  const MyPageEdit({Key? key, required this.mbti, required this.imageURL, required this.introduction}) : super(key: key);
+  const MyPageEdit({Key? key, required this.name, required this.mbti, required this.imageURL, required this.introduction}) : super(key: key);
 
   @override
   State<MyPageEdit> createState() => _MyPageEditState();
@@ -35,6 +37,53 @@ class _MyPageEditState extends State<MyPageEdit> {
     setState(() {
       _imageFile = pickedFile!;
     });
+  }
+
+  void editUserInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/info/profile');
+
+    final data = jsonEncode(
+        {'name': widget.name,
+          'mbti': widget.mbti,
+          'introduction': widget.introduction,
+        }
+    );
+
+    var response = await http.post(url, body: data, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+      print("data: ${data}", );
+
+      Navigator.pop(context);
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+      // );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        editUserInfo();
+        check = false;
+      }
+    }
+    else {
+      print('error : ${response.reasonPhrase}');
+    }
   }
 
   Future<dynamic> patchUserProfileImage(dynamic input) async {

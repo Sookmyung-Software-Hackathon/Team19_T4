@@ -84,7 +84,7 @@ class _MyPageState extends State<MyPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MyPageEdit(imageURL: widget.imgURL, mbti: widget.mbti, introduction: widget.introduce,)),
+                                        builder: (context) => MyPageEdit(name: widget.userName, imageURL: widget.imgURL, mbti: widget.mbti, introduction: widget.introduce,)),
                                   );
                                 }, icon: Icon(Icons.edit))
                               ],
