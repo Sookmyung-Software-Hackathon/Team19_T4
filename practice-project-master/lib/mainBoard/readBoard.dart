@@ -354,6 +354,24 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
           ),
           onPressed: () {
             // _requestMeal() //글의 아이디
+            showDialog<String>(
+              context: context,
+              builder: (BuildContext context) => AlertDialog(
+                title: const Text(
+                  '신청 전송 완료',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                content: const Text('밥 때 신청 전송이 완료되었습니다.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('확인'),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),
