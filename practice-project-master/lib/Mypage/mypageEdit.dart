@@ -32,6 +32,18 @@ class _MyPageEditState extends State<MyPageEdit> {
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
+  String _selectRegion = '용산구';
+
+  String imgUrl = "";
+  String userName = "";
+  String introduce = "";
+  String mbti = "";
+
+  int age = 0;
+  String sex = "";
+
+  int score = 0;
+
   void getImage({required ImageSource source}) async {
     final pickedFile = await _picker.getImage(source: source);
     setState(() {
@@ -43,9 +55,10 @@ class _MyPageEditState extends State<MyPageEdit> {
     var url = Uri.http('${serverHttp}:8080', '/member/info/profile');
 
     final data = jsonEncode(
-        {'name': widget.name,
-          'mbti': widget.mbti,
-          'introduction': widget.introduction,
+        {
+          'name': widget.name,
+          'mbti': controller1.text,
+          'introduction': controller2.text,
         }
     );
 
@@ -65,8 +78,11 @@ class _MyPageEditState extends State<MyPageEdit> {
 
       var data = body["response"];
       print("data: ${data}", );
+      userInfo();
+      //Navigator.pop(context);
 
-      Navigator.pop(context);
+
+      //Navigator.pop(context);
       // Navigator.push(
       //   context,
       //   MaterialPageRoute(
@@ -102,6 +118,103 @@ class _MyPageEditState extends State<MyPageEdit> {
       return response.data;
     } catch (e) {
       print("error: ${e}");
+    }
+  }
+
+  void userInfo() async {
+    var url = Uri.http('${serverHttp}:8080', '/member/info');
+
+    var response = await http.get(url, headers: {
+      'Accept': 'application/json',
+      "content-type": "application/json",
+      "X-AUTH-TOKEN": "${authToken}"
+    });
+
+    print(url);
+    print("Bearer ${authToken}");
+    print('Response status: ${response.statusCode}');
+
+    if (response.statusCode == 200) {
+      print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
+
+      var body = jsonDecode(utf8.decode(response.bodyBytes));
+
+      var data = body["response"];
+      print("data: ${data}", );
+      imgUrl = data["imgUrl"].toString();
+      userName = data["name"].toString();
+
+      var profileDto = data["profileDto"];
+      print(profileDto);
+      age = int.parse(profileDto["birthYear"]);
+      age = 2023 - age;
+
+      sex = profileDto["sex"].toString();
+
+      if(sex == "FEMALE"){
+        sex = "여성";
+      }else{
+        sex = "남성";
+      }
+
+      if(profileDto["mbti"] == null){
+        mbti = "";
+      }
+      else{
+        mbti = profileDto["mbti"].toString();
+      }
+
+      if(profileDto["introduction"] == null){
+        introduce = "";
+      }
+      else{
+        introduce = profileDto["introduction"].toString();
+      }
+
+      score = profileDto["score"];
+
+      print (imgUrl);
+
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+          title: const Text(
+            '내 정보 변경',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text('정보 변경에 성공하였습니다.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                // Navigator.push(context,
+                //   MaterialPageRoute(builder: (context) => LoginPage()),
+                // );
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        ),
+      );
+
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MyPage(imgURL: imgUrl, userName: userName, introduce: introduce, mbti: mbti, age: age, sex: sex, score: score,)),
+      );
+
+      // name = data["name"].toString();
+    } else if(response.statusCode == 401){
+      await RefreshToken(context);
+      if(check == true){
+        userInfo();
+        check = false;
+      }
+    }
+    else {
+
+      print('error : ${response.reasonPhrase}');
     }
   }
 
@@ -141,7 +254,9 @@ class _MyPageEditState extends State<MyPageEdit> {
                   patchUserProfileImage(formData);
                 }
 
-                Navigator.pop(context);
+                editUserInfo();
+
+                //Navigator.pop(context);
                 // Navigator.pop(context);
                 // Navigator.push(
                 //   context,
@@ -149,27 +264,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                 //       builder: (context) => MyPage()),
                 // );
                 // TODO dialog show
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text(
-                      '내 정보 변경',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    content: const Text('정보 변경에 성공하였습니다.'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          // Navigator.push(context,
-                          //   MaterialPageRoute(builder: (context) => LoginPage()),
-                          // );
-                        },
-                        child: const Text('확인'),
-                      ),
-                    ],
-                  ),
-                );
+
               },
               child: Text('수정 완료'),
             ),
