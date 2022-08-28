@@ -283,14 +283,6 @@ class _MainBoardPageState extends State<MainBoardPage> {
                         children: [
                           Container(
                               child: InkWell(
-                            onTap: () {},
-                            child: Icon(
-                              Icons.notifications_none_outlined,
-                              size: 35.0,
-                            ),
-                          )),
-                          Container(
-                              child: InkWell(
                             onTap: () {
                               userInfo();
                             },

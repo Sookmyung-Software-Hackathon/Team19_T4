@@ -504,21 +504,22 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
 
   _postCreateBoard(String title, content, time, location, restaurant, foodType, int parti) async {
     // print(title+' '+location+' '+restaurant+' '+foodType+' '+time+' '+parti.toString());
-    Map<String, String> gu=<String, String>{
+    Map<String, String> gu = <String, String>{
       "gu": location
     };
 
-    Map plan={
-      'appointmentTime':time,
+    Map plan = {
+      'appointmentTime': time,
       'location': gu,
-      'restaurant':restaurant,
+      'restaurant': restaurant,
       'foodType': foodType,
       'numOfParticipants': parti
     };
 
     var url = Uri.http('${serverHttp}:8080', '/post/new');
 
-    final data = jsonEncode({'title': title, 'content': content,'chatRoomLink':'', 'plan': plan});
+    final data = jsonEncode(
+        {'title': title, 'content': content, 'chatRoomLink': '', 'plan': plan});
 
     var response = await http.post(url, body: data, headers: {
       'Accept': 'application/json',
@@ -533,11 +534,10 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
       print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
       var body = jsonDecode(response.body);
-      dynamic data=body['response'];
+      dynamic data = body['response'];
 
       print(data);
-
-      // Navigator.of(context).pop();
+      Navigator.of(context).pop();
     } else {
       print('error : ${response.reasonPhrase}');
     }
