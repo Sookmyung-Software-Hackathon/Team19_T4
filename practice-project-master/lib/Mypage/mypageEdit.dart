@@ -1,20 +1,31 @@
+import 'package:T4/Login/login.dart';
 import 'package:T4/Mypage/mypageMain.dart';
 import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:dio/dio.dart';
 
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
+import '../server.dart';
+
 class MyPageEdit extends StatefulWidget {
-  const MyPageEdit({Key? key}) : super(key: key);
+  final String imageURL;
+  final String mbti;
+  final String introduction;
+
+  const MyPageEdit({Key? key, required this.mbti, required this.imageURL, required this.introduction}) : super(key: key);
 
   @override
   State<MyPageEdit> createState() => _MyPageEditState();
 }
 
 class _MyPageEditState extends State<MyPageEdit> {
+
+  TextEditingController controller1 = TextEditingController();
+  TextEditingController controller2 = TextEditingController();
 
   PickedFile? _imageFile;
   final ImagePicker _picker = ImagePicker();
@@ -26,8 +37,35 @@ class _MyPageEditState extends State<MyPageEdit> {
     });
   }
 
+  Future<dynamic> patchUserProfileImage(dynamic input) async {
+    print("프로필 사진을 서버에 업로드 합니다.");
+    var dio = new Dio();
+
+    try {
+
+      // dio.options.maxRedirects.isFinite;
+      dio.options.baseUrl = 'http://${serverHttp}:8080';
+      dio.options.contentType = 'multipart/form-data';
+      dio.options.headers = {'X-AUTH-TOKEN': authToken};
+
+      final response = await dio.post('/member/info/profile-image', data: input);
+
+      return response.data;
+    } catch (e) {
+      print("error: ${e}");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller1..text = '${widget.mbti}';
+    controller2..text = '${widget.introduction}';
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -44,8 +82,16 @@ class _MyPageEditState extends State<MyPageEdit> {
                 primary: Color(0xffFF5D5D),
                 onSurface: Color(0xffFF5D5D),
               ),
-              onPressed: () {
-                print("저장");
+              onPressed: () async {
+
+                final _imageFile = this._imageFile;
+
+                if(_imageFile != null){
+                  dynamic sendData = _imageFile.path;
+                  var formData = FormData.fromMap({'file': await MultipartFile.fromFile(sendData)});
+                  patchUserProfileImage(formData);
+                }
+
                 Navigator.pop(context);
                 // Navigator.pop(context);
                 // Navigator.push(
@@ -129,7 +175,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                   child: Container(
                                       child: CircleAvatar(
                                           radius: 100.0,
-                                          backgroundImage: _imageFile == null ? NetworkImage("https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg")  : FileImage(File(_imageFile!.path)) as ImageProvider
+                                          backgroundImage: _imageFile == null ? NetworkImage("${widget.imageURL}")  : FileImage(File(_imageFile!.path)) as ImageProvider
                                         //FileImage(File(_imageFile!.path))
                                       )
                                   ),
@@ -159,6 +205,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                           Container(
                                             margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
                                             child: TextFormField(
+                                              controller: controller1,
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(
                                                     borderRadius:
@@ -170,7 +217,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                                                   ),
                                                   contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                                   hintText: 'MBTI를 입력하세요.',
-                                                  hintStyle: TextStyle(fontSize: 16.0)),
+                                                  hintStyle: TextStyle(fontSize: 16.0)
+                                                ),
                                             ),
                                             height: 40,
                                           ),
@@ -187,6 +235,7 @@ class _MyPageEditState extends State<MyPageEdit> {
                                           Container(
                                             margin: EdgeInsets.only(top: 10.0),
                                             child: TextFormField(
+                                              controller: controller2,
                                               keyboardType: TextInputType.multiline,
                                               minLines: 2,
                                               maxLines: 2,
@@ -201,7 +250,8 @@ class _MyPageEditState extends State<MyPageEdit> {
                                                   ),
                                                   contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                                                   hintText: '한 줄 소개를 입력하세요.',
-                                                  hintStyle: TextStyle(fontSize: 16.0)),
+                                                  hintStyle: TextStyle(fontSize: 16.0)
+                                              ),
                                             ),
                                           ),
 
