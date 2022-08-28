@@ -29,10 +29,7 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
                           onTap: () {
                             Navigator.pop(context);
                           },
-                          child: Text(
-                            '<',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 30),
+                          child: Icon(Icons.arrow_back_ios, color: Color(0xff333333),
                           ),
                         )
                       ],
