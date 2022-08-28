@@ -7,11 +7,13 @@ import '../Login/findPassword.dart';
 import 'signup.dart';
 import 'package:T4/server.dart';
 import 'package:T4/color.dart';
+import 'package:T4/mainBoard/createBoard.dart';
 
 var authToken = '';
 var refreshToken = '';
 var name = "";
 var id = "";
+var res;
 
 class LoginPage extends StatefulWidget {
   @override
@@ -30,18 +32,10 @@ class _LoginPageState extends State<LoginPage> {
       form.save();
       print('Form is valid Email: $_id, password: $_password');
 
-      signIn(_id, _password);
+      _signIn(_id, _password);
     } else {
       print('Form is invalid Email: $_id, password: $_password');
     }
-  }
-
-  void forgotPassword() {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => findPasswordPage()),
-    );
   }
 
   void signUp() {
@@ -148,18 +142,6 @@ class _LoginPageState extends State<LoginPage> {
                                     ),
                                   )
                                 ),
-                            Container(
-                                child: TextButton(
-                                    onPressed: forgotPassword,
-                                    child: const Text(
-                                      "비밀번호 찾기",
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xff666666),
-                                      ),
-                                    ),
-                                  )
-                                )
                           ],
                         )
                       ),
@@ -170,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
             )));
   }
 
-  void signIn(String id, pass) async {
+   _signIn(String id, pass) async {
     var url = Uri.http('${serverHttp}:8080', '/member/login');
 
     final data = jsonEncode({'memberId': id, 'password': pass});
@@ -184,13 +166,9 @@ class _LoginPageState extends State<LoginPage> {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print('Response status: ${response.statusCode}');
       print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
       var body = jsonDecode(response.body);
-
-      ///!! 일단 result 값으로 지정해 놓음. 후에 서버와 논의하여 data값 설정하기.
-      //print("token: " + token.toString());
       dynamic data=body["response"];
 
       if (body["success"] == true) {
@@ -199,12 +177,15 @@ class _LoginPageState extends State<LoginPage> {
         print("로그인에 성공하셨습니다.");
         authToken = token;
 
-        userInfo();
-        Navigator.pop(context);
+
+        // await _boardList("종로구");
+
+        // Navigator.pop(context);
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MainBoardPage()),
+          MaterialPageRoute(builder: (context) => MainBoardPage(data: data)), //더미 데이터 넣어야함
         );
+        //data: res
       }
     } else if(response.statusCode == 400){
       print('Response status: ${response.statusCode}');
@@ -219,38 +200,46 @@ class _LoginPageState extends State<LoginPage> {
       else if (body["success"] == false && data["errorName"]=="WRONG_PASSWORD"){
       _showDialog("비밀번호가 틀렸습니다.");
       }
-      else{
-      _showDialog("회원의 password는 빈값일 수 없습니다.");
-      }
+      // else{
+      // _showDialog("회원의 password는 빈값일 수 없습니다.");
+      // }
     }
     else {
       print(response.reasonPhrase);
     }
   }
 
-  void userInfo() async {
-    var url = Uri.http('${serverHttp}:8080', '/member/info');
+  _boardList(String loc) async{
+    Map<String,String> gu=<String,String>{
+      "gu": loc
+    };
+
+    Map<String, dynamic> _queryParameters = <String,dynamic>{
+      'location':gu
+    };
+
+    var url = Uri.http('${serverHttp}:8080', '/post/location', _queryParameters);
+    // final data = jsonEncode({"location": gu});
 
     var response = await http.get(url, headers: {
       'Accept': 'application/json',
       "content-type": "application/json",
-      "X-AUTH-TOKEN": "Bearer ${authToken}"
+      "X-AUTH-TOKEN": "${authToken}"
     });
 
-    print(url);
-    print("Bearer ${authToken}");
-    print('Response status: ${response.statusCode}');
+    // print(url);
+    print("boardList: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       print('Response body: ${jsonDecode(utf8.decode(response.bodyBytes))}');
 
-      var body = jsonDecode(utf8.decode(response.bodyBytes));
+      var body = jsonDecode(response.body);
+      dynamic data=body["response"];
 
-      var data = body["data"];
-      id = data["memberId"].toString();
-      name = data["name"].toString();
-    } else {
-      print('error : ${response.reasonPhrase}');
+      res=data;
+    }
+    else {
+      print(response.reasonPhrase);
     }
   }
 
