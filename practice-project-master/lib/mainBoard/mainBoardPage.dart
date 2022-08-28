@@ -46,13 +46,14 @@ class _MainBoardPageState extends State<MainBoardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      body: Container(
+        color: Color(0xffffffff),
+        child:SafeArea(
           child: Container(
-              color: Color(0xffffffff),
               child: Column(children: [
                 Container(
-                  padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                  height: 50.0,
+                  padding: EdgeInsets.only(left: 20.0, right: 20.0),
+                  height: MediaQuery.of(context).size.height*7/100,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +63,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                         children: [
                           Container(
                             child: Icon(
-                              Icons.location_on_outlined,
+                              Icons.location_on_rounded,
                               color: Color(greenColor),
                               size: 32.0,
                             ),
@@ -113,7 +114,10 @@ class _MainBoardPageState extends State<MainBoardPage> {
                           )),
                           Container(
                               child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                  context, MaterialPageRoute(builder: (_) => MyPage()));
+                            },
                             child: Icon(
                               Icons.account_circle_outlined,
                               color: Color(greenColor),
@@ -129,7 +133,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                     child: SingleChildScrollView(
                   child: Container(
                       padding:
-                          EdgeInsets.only(left: 30.0, right: 30.0, top: 5.0),
+                          EdgeInsets.only(left: 30.0, right: 30.0, top: 5.0, bottom:30.0),
                       child: Column(
                         children: [
                           ...List.generate(
@@ -206,11 +210,16 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                           children: [
                                                             Icon(
                                                               Icons
-                                                                  .location_on_outlined,
+                                                                  .location_on_rounded,
                                                               color: Color(
                                                                   greenColor),
                                                               size: 20.0,
                                                             ),
+                                                            Padding(
+                                                                padding:
+                                                                EdgeInsets
+                                                                    .all(
+                                                                    2.0)),
                                                             Text('탕화쿵푸 숙대점',
                                                                 style: TextStyle(
                                                                     fontSize:
@@ -240,7 +249,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                                                                 padding:
                                                                     EdgeInsets
                                                                         .all(
-                                                                            2.0)),
+                                                                            2.5)),
                                                             Text(
                                                               '2022.08.28 13:00',
                                                               style: TextStyle(
@@ -282,7 +291,7 @@ class _MainBoardPageState extends State<MainBoardPage> {
                         ],
                       )),
                 )),
-              ]))),
+              ])))),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

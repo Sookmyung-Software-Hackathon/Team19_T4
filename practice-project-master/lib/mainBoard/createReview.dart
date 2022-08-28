@@ -21,7 +21,7 @@ class _CreateReviewPageState extends State<CreateReviewPage> {
               child: Column(children: [
                 Container(
                     padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                    height: 50.0,
+                    height: MediaQuery.of(context).size.height*7/100,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
