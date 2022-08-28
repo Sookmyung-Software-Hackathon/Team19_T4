@@ -51,7 +51,7 @@ class _MyPageState extends State<MyPage> {
                       children: <Widget>[
                         Container(
                             margin: EdgeInsets.only(bottom: 15),
-                            padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+                            //padding: EdgeInsets.only( top: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
