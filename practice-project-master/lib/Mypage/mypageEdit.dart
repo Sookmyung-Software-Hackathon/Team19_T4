@@ -98,145 +98,126 @@ class _MyPageEditState extends State<MyPageEdit> {
                             bottomRight: Radius.circular(30)
                         )
                     ),
-                    child: Container(
-                      padding: EdgeInsets.only(left: 30, right: 30, top: 20),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 120,
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-
-                            Container(
-                              margin: EdgeInsets.only(bottom: 15),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(onPressed: (){
-                                    Navigator.pop(context);
-                                  },
-                                      icon: Icon(Icons.arrow_back_ios_new_rounded)),
-                                  Spacer(),
-                                ],
-                              )
-                            ),
-
-                            GestureDetector(
-                              onTap: () {
-                                getImage(source: ImageSource.gallery);
-                              },
-                              child: Container(
-                                  child: CircleAvatar(
-                                      radius: 100.0,
-                                      backgroundImage: _imageFile == null ? NetworkImage("https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg")  : FileImage(File(_imageFile!.path)) as ImageProvider
-                                    //FileImage(File(_imageFile!.path))
-                                  )
-                              ),
-                            ),
-                            //
-                            // GestureDetector(
-                            //   onTap: (){
-                            //     getImage(source: ImageSource.gallery);
-                            //   },
-                            //   child: Container(
-                            //     height: 160.0,
-                            //     width: 160.0,
-                            //     decoration: new BoxDecoration(
-                            //       color: const Color(0xff7c94b6),
-                            //       image: new DecorationImage(
-                            //         image: ExactAssetImage(_imageFile.path),
-                            //         fit: BoxFit.cover,
-                            //       ),
-                            //       border:
-                            //       Border.all(color: Colors.red, width: 5.0),
-                            //       borderRadius:
-                            //       new BorderRadius.all(const Radius.circular(80.0)),
-                            //     ),
-                            //   ),
-                            // ),
-
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                    child: Column(
+                      children: [
+                        Container(
+                            margin: EdgeInsets.only(bottom: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(20),
-                                  margin: EdgeInsets.only(top: 30.0),
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffFFFFFF),
-                                      borderRadius: BorderRadius.all(Radius.circular(15))
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("MBTI",
-                                        style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-
-                                      Container(
-                                        margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(10.0)),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xffFF5D5D), width: 2.0),
-                                              ),
-                                              contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                              hintText: 'MBTI를 입력하세요.',
-                                              hintStyle: TextStyle(fontSize: 16.0)),
-                                        ),
-                                        height: 40,
-                                      ),
-
-
-                                      Text("한 줄 소개",
-                                        style: TextStyle(
-                                          color: Color(0xff333333),
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-
-                                      Container(
-                                        margin: EdgeInsets.only(top: 10.0),
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.multiline,
-                                          minLines: 2,
-                                          maxLines: 2,
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                borderRadius:
-                                                BorderRadius.all(Radius.circular(10.0)),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xffFF5D5D), width: 2.0),
-                                              ),
-                                              contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                                              hintText: '한 줄 소개를 입력하세요.',
-                                              hintStyle: TextStyle(fontSize: 16.0)),
-                                        ),
-                                      ),
-
-                                    ],
+                                IconButton(onPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                    icon: Icon(Icons.arrow_back_ios_new_rounded)),
+                                Spacer(),
+                              ],
+                            )
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 5 /7,
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    getImage(source: ImageSource.gallery);
+                                  },
+                                  child: Container(
+                                      child: CircleAvatar(
+                                          radius: 100.0,
+                                          backgroundImage: _imageFile == null ? NetworkImage("https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg.jpg")  : FileImage(File(_imageFile!.path)) as ImageProvider
+                                        //FileImage(File(_imageFile!.path))
+                                      )
                                   ),
                                 ),
 
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(20),
+                                      margin: EdgeInsets.only(top: 30.0),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffFFFFFF),
+                                          borderRadius: BorderRadius.all(Radius.circular(15))
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("MBTI",
+                                            style: TextStyle(
+                                              color: Color(0xff333333),
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+                                            child: TextFormField(
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                    BorderRadius.all(Radius.circular(10.0)),
+                                                  ),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Color(0xffFF5D5D), width: 2.0),
+                                                  ),
+                                                  contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                  hintText: 'MBTI를 입력하세요.',
+                                                  hintStyle: TextStyle(fontSize: 16.0)),
+                                            ),
+                                            height: 40,
+                                          ),
+
+
+                                          Text("한 줄 소개",
+                                            style: TextStyle(
+                                              color: Color(0xff333333),
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+
+                                          Container(
+                                            margin: EdgeInsets.only(top: 10.0),
+                                            child: TextFormField(
+                                              keyboardType: TextInputType.multiline,
+                                              minLines: 2,
+                                              maxLines: 2,
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(
+                                                    borderRadius:
+                                                    BorderRadius.all(Radius.circular(10.0)),
+                                                  ),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color: Color(0xffFF5D5D), width: 2.0),
+                                                  ),
+                                                  contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                                  hintText: '한 줄 소개를 입력하세요.',
+                                                  hintStyle: TextStyle(fontSize: 16.0)),
+                                            ),
+                                          ),
+
+                                        ],
+                                      ),
+                                    ),
+
+
+                                  ],
+                                ),
 
                               ],
                             ),
-
-                          ],
-                        ),
-                      ),
+                          ),
+                        )
+                      ],
                     )
                 ),
 

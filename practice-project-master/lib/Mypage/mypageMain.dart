@@ -1,4 +1,7 @@
 import 'package:T4/Mypage/mypageEdit.dart';
+import 'package:T4/Mypage/participationListPage.dart';
+import 'package:T4/Mypage/waitingListPage.dart';
+import 'package:T4/Mypage/writingListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -48,7 +51,7 @@ class _MyPageState extends State<MyPage> {
                       children: <Widget>[
                         Container(
                             margin: EdgeInsets.only(bottom: 15),
-                            padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+                            //padding: EdgeInsets.only( top: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -349,7 +352,11 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                print("hello1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WaitingListPage()),
+                );
               },
               child: Container(
                 height: 50,
@@ -391,7 +398,11 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                print("hello1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ParticipationListPage()),
+                );
               },
               child: Container(
                 height: 50,
@@ -431,7 +442,11 @@ class _MyPageState extends State<MyPage> {
 
             GestureDetector(
               onTap: () {
-                print("hello1");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WritingListPage()),
+                );
               },
               child: Container(
                 height: 50,
