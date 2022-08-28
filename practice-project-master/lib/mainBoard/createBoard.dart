@@ -34,7 +34,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
             child: Column(children: [
               Container(
                   padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                  height: 50.0,
+                  height: MediaQuery.of(context).size.height*7/100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -100,7 +100,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                           //   )
                           ),
                           padding: EdgeInsets.only(
-                              right: 10.0, left: 10.0, bottom: 30.0, top:5.0),
+                              right: 10.0, left: 10.0, bottom: 25.0, top:5.0),
                           child: Column(
                             children: [
                               Row(
@@ -134,7 +134,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                         });
                                       },
                                       underline: Container(
-                                        height: 2,
+                                        height: 1,
                                         color: Color(greenColor),
                                       ),
                                       // underline: DropdownButtonHideUnderline(
@@ -224,7 +224,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                           });
                                         },
                                         underline: Container(
-                                          height: 2,
+                                          height: 1,
                                           color: Color(greenColor),
                                         ),
                                         // underline: DropdownButtonHideUnderline(
@@ -305,7 +305,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                         25 /
                                         100,
                                     child: Text(
-                                      '모집 인원',
+                                      '참여 인원',
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: Color(0xff333333),
@@ -336,7 +336,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                                 color: Color(greenColor),
                                               ),
                                             ),
-                                        hintText: "본인 포함 10명까지",
+                                        hintText: "10명까지",
                                         hintStyle: TextStyle(fontSize: 14.0)),
                                         style: TextStyle(fontSize: 14.0, color: Color(0xff333333)),
                                       ),),
@@ -386,11 +386,11 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                                       ),),
                                 ],
                               ),
-                              Padding(padding: EdgeInsets.only(bottom:5.0)),
+                              Padding(padding: EdgeInsets.only(bottom:15.0)),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                Text("* 링크를 작성하실 경우 매징된 유저에게 링크가 보내집니다.", style: TextStyle(fontSize: 10.0, color: Color(greenColor)),)
+                                Text("* 링크를 작성하실 경우 매징된 유저에게 링크가 보내집니다.", style: TextStyle(fontSize: 10.0, color: Color(0xff333333)),)
 
                               ],)
                             ],
@@ -403,7 +403,7 @@ class _CreateBoardPageState extends State<CreateBoardPage> {
                             //     // color: Color(0xfff0f0f0),
                             //     border: Border.all(
                             //         width: 2, color: Color(greenColor))),
-                            width: MediaQuery.of(context).size.width * 80 / 100,
+                            width: MediaQuery.of(context).size.width * 85 / 100,
                             height: 150.0,
                             child: TextFormField(
                               controller: _title,

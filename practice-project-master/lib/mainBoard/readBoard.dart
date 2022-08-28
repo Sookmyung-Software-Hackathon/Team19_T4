@@ -20,7 +20,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
             child: Column(children: [
               Container(
                   padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                  height: 50.0,
+                  height: MediaQuery.of(context).size.height*7/100,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -88,6 +88,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xff333333)),
                                     ),
+                                    Padding(padding: EdgeInsets.all(2.0)),
                                     Text(
                                       '여, 20대 초반',
                                       style: TextStyle(
@@ -108,12 +109,13 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                       fontWeight: FontWeight.w600,
                                       color: Color(0xff333333)),
                                 ),
+                                Padding(padding: EdgeInsets.all(2.0)),
                                 Text(
                                   '80',
                                   style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w600,
-                                      color: Color(0xff333333)),
+                                      color: Color(0xff6ACC80)),
                                 ),
                               ],
                             )
@@ -156,7 +158,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '지역',
@@ -180,7 +182,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '음식점 이름',
@@ -204,7 +206,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '음식 종류',
@@ -228,7 +230,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '날짜 및 시간',
@@ -252,7 +254,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '모집 인원',
@@ -276,7 +278,7 @@ class _ReadBoardPageState extends State<ReadBoardPage> {
                                   children: [
                                     Container(
                                       width: MediaQuery.of(context).size.width *
-                                          25 /
+                                          27 /
                                           100,
                                       child: Text(
                                         '오픈 채팅방 링크',
